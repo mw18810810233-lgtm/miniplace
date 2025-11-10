@@ -6,19 +6,28 @@
     <title>英语朗读打卡助手</title>
     <style>
         :root {
-            --primary: #10B981; /* 主色调：清新的绿色 */
-            --primary-light: #A7F3D0; /* 浅绿色 */
-            --success: #059669; /* 成功绿色 */
-            --background: #F0FDF4; /* 背景色：非常浅的绿色 */
-            --surface: #FFFFFF; /* 卡片背景色：纯白 */
-            --text: #064E3B; /* 正文色：深绿色 */
-            --text-light: #6B7280; /* 辅助文字色：灰色 */
+            --primary: #10B981;
+            --primary-light: #A7F3D0;
+            --success: #059669;
+            --background: #F0FDF4;
+            --surface: #FFFFFF;
+            --text: #064E3B;
+            --text-light: #6B7280;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            vertical-align: middle;
+            margin-right: 12px;
+            border-radius: 8px;
+            object-fit: contain;
         }
 
         body {
@@ -50,6 +59,9 @@
             margin-bottom: 10px;
             font-weight: 600;
             font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .subtitle {
@@ -184,7 +196,6 @@
             }
         }
 
-        /* 响应式设计 */
         @media (max-width: 600px) {
             body {
                 padding: 15px;
@@ -195,12 +206,17 @@
             h1 {
                 font-size: 1.5em;
             }
+            .logo {
+                width: 32px;
+                height: 32px;
+                margin-right: 8px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌿 英语朗读打卡</h1>
+        <h1><img src="./mylogo.png" alt="英语朗读打卡" class="logo">英语朗读打卡</h1>
         <p class="subtitle">记录每一天的进步，遇见更好的自己</p>
         
         <div class="goal-card">
@@ -228,7 +244,6 @@
     </div>
 
     <script>
-        // 手动打卡功能
         document.getElementById('manualBtn').addEventListener('click', function() {
             const count = document.getElementById('sentenceCount').value;
             const resultDiv = document.getElementById('result');
@@ -242,12 +257,10 @@
             resultDiv.style.display = 'block';
         });
 
-        // 录音按钮功能（待实现）
         document.getElementById('recordBtn').addEventListener('click', function() {
             alert('录音功能即将上线！下一步我们就来实现它。');
         });
 
-        // 输入框回车键支持
         document.getElementById('sentenceCount').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('manualBtn').click();
