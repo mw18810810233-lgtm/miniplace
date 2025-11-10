@@ -1,33 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>我的英语朗读打卡空间</title>
+    <title>英语朗读打卡助手</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f0f8ff; /* 浅蓝色背景 */
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f5f9ff;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            color: #4a90e2; /* 蓝色标题 */
+            color: #4a6ee0;
+            text-align: center;
         }
-        .card {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: inline-block;
+        .goal-text {
+            background: #e6eeff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #4a6ee0;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #3a5bc7;
+        }
+        #result {
             margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none; /* 默认隐藏 */
+        }
+        .success {
+            background-color: #e6f7e9;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
         }
     </style>
 </head>
 <body>
-    <h1>欢迎来到我的英语学习空间！</h1>
-    <div class="card">
-        <p>这是我的第一个网页。</p>
-        <p>未来，这里将变成一个英语朗读打卡应用！</p>
-        <p><strong>今日目标：朗读5个英文句子！</strong></p>
+    <div class="container">
+        <h1>🗓️ 英语朗读打卡</h1>
+        
+        <div class="goal-text">
+            <h3>今日朗读材料：</h3>
+            <p>"The future belongs to those who believe in the beauty of their dreams." - Eleanor Roosevelt</p>
+            <p><strong>关键词：</strong> future, believe, beauty, dreams</p>
+        </div>
+
+        <div>
+            <label for="sentenceCount">今日朗读句子数：</label>
+            <input type="number" id="sentenceCount" value="1" min="1" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+
+        <button id="recordBtn">🎤 开始录音朗读</button>
+        <button id="manualBtn">✏️ 手动完成打卡</button>
+
+        <div id="result">
+            <!-- 这里将来会显示打卡结果 -->
+        </div>
     </div>
+
+    <script>
+        // 这里是未来要添加的JavaScript代码
+        document.getElementById('manualBtn').addEventListener('click', function() {
+            const count = document.getElementById('sentenceCount').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = `
+                <h3>✅ 打卡成功！</h3>
+                <p>记录了 <strong>${count}</strong> 个句子的朗读。</p>
+                <p><em>（手动打卡模式 - 下一步我们将加入语音识别）</em></p>
+            `;
+            resultDiv.className = 'success';
+            resultDiv.style.display = 'block';
+        });
+
+        // 录音按钮的占位功能
+        document.getElementById('recordBtn').addEventListener('click', function() {
+            alert('录音功能即将上线！下一步我们就来实现它。');
+        });
+    </script>
 </body>
 </html>
