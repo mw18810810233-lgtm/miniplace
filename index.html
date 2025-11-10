@@ -1,194 +1,234 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>英语朗读打卡助手</title>
     <style>
-    :root {
-        --primary: #6C63FF; /* 主色调：柔和的紫色 */
-        --primary-light: #D7D4FF;
-        --success: #4CAF50; /* 成功色：清新的绿色 */
-        --background: #F8FAFC; /* 背景色：干净的浅灰蓝 */
-        --surface: #FFFFFF; /* 卡片背景色：纯白 */
-        --text: #2D3748; /* 正文色：深灰色 */
-        --text-light: #718096; /* 辅助文字色：浅灰色 */
-    }
+        :root {
+            --primary: #6C63FF;
+            --primary-light: #D7D4FF;
+            --success: #4CAF50;
+            --background: #F8FAFC;
+            --surface: #FFFFFF;
+            --text: #2D3748;
+            --text-light: #718096;
+        }
 
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        max-width: 500px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: var(--background);
-        color: var(--text);
-        line-height: 1.6;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .container {
-        background: var(--surface);
-        padding: 30px;
-        border-radius: 20px; /* 更大的圆角，更现代 */
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); /* 更柔和的阴影 */
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.8);
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    h1 {
-        color: var(--primary);
-        text-align: center;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
+        .container {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            width: 100%;
+        }
 
-    .subtitle {
-        text-align: center;
-        color: var(--text-light);
-        margin-bottom: 30px;
-        font-size: 0.95em;
-    }
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.8em;
+        }
 
-    .goal-card {
-        background: linear-gradient(135deg, var(--primary-light) 0%, #E6F3FF 100%);
-        padding: 20px;
-        border-radius: 12px;
-        margin: 25px 0;
-        border-left: 4px solid var(--primary);
-    }
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
 
-    .goal-card h3 {
-        margin-top: 0;
-        color: var(--text);
-        font-size: 1.1em;
-    }
+        .goal-card {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #E6F3FF 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid var(--primary);
+        }
 
-    .goal-card p {
-        margin: 8px 0;
-    }
+        .goal-card h3 {
+            margin-top: 0;
+            color: var(--text);
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
 
-    .keywords {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px; /* 关键词之间的间距 */
-        margin-top: 10px;
-    }
+        .goal-card p {
+            margin: 8px 0;
+        }
 
-    .keyword {
-        background: rgba(255, 255, 255, 0.7);
-        padding: 4px 10px;
-        border-radius: 20px; /* 胶囊形状 */
-        font-size: 0.85em;
-        color: var(--primary);
-        font-weight: 500;
-    }
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
 
-    .input-group {
-        margin-bottom: 20px;
-    }
+        .keyword {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: var(--primary);
+            font-weight: 500;
+        }
 
-    label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: var(--text);
-    }
+        .input-group {
+            margin-bottom: 20px;
+        }
 
-    input[type="number"] {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        box-sizing: border-box;
-        font-size: 16px;
-        transition: all 0.3s ease;
-    }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
 
-    input[type="number"]:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-    }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: var(--surface);
+        }
 
-    .btn {
-        display: block;
-        width: 100%;
-        padding: 14px 20px;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin: 10px 0;
-        text-align: center;
-    }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
 
-    .btn-primary {
-        background-color: var(--primary);
-        color: white;
-    }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+            text-align: center;
+        }
 
-    .btn-primary:hover {
-        background-color: #5a52e0; /* 主色调深一点 */
-        transform: translateY(-2px); /* 悬浮微微上浮 */
-        box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
-    }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
 
-    .btn-secondary {
-        background-color: var(--surface);
-        color: var(--text);
-        border: 1px solid #E2E8F0;
-    }
+        .btn-primary:hover {
+            background-color: #5a52e0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+        }
 
-    .btn-secondary:hover {
-        background-color: #F7FAFC;
-        border-color: var(--primary-light);
-    }
+        .btn-secondary {
+            background-color: var(--surface);
+            color: var(--text);
+            border: 1px solid #E2E8F0;
+        }
 
-    #result {
-        margin-top: 25px;
-        padding: 20px;
-        border-radius: 12px;
-        display: none;
-        text-align: center;
-        animation: fadeIn 0.5s ease; /* 结果浮现动画 */
-    }
+        .btn-secondary:hover {
+            background-color: #F7FAFC;
+            border-color: var(--primary-light);
+        }
 
-    .success {
-        background-color: #F0FFF4;
-        border: 1px solid #9AE6B4;
-        color: #2F855A;
-    }
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
+        .success {
+            background-color: #F0FFF4;
+            border: 1px solid #9AE6B4;
+            color: #2F855A;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>🗓️ 英语朗读打卡</h1>
+        <h1>🌿 英语朗读打卡</h1>
+        <p class="subtitle">记录每一天的进步，遇见更好的自己</p>
         
-        <div class="goal-text">
-            <h3>今日朗读材料：</h3>
-            <p>"The future belongs to those who believe in the beauty of their dreams." - Eleanor Roosevelt</p>
-            <p><strong>关键词：</strong> future, believe, beauty, dreams</p>
+        <div class="goal-card">
+            <h3>📚 今日朗读材料</h3>
+            <p><em>"The future belongs to those who believe in the beauty of their dreams."</em> — Eleanor Roosevelt</p>
+            <div class="keywords">
+                <span class="keyword">future</span>
+                <span class="keyword">believe</span>
+                <span class="keyword">beauty</span>
+                <span class="keyword">dreams</span>
+            </div>
         </div>
 
-        <div>
-            <label for="sentenceCount">今日朗读句子数：</label>
-            <input type="number" id="sentenceCount" value="1" min="1" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px;">
+        <div class="input-group">
+            <label for="sentenceCount">📊 今日朗读句子数：</label>
+            <input type="number" id="sentenceCount" value="1" min="1">
         </div>
 
-        <button id="recordBtn">🎤 开始录音朗读</button>
-        <button id="manualBtn">✏️ 手动完成打卡</button>
+        <button class="btn btn-primary" id="recordBtn">🎤 开始录音朗读</button>
+        <button class="btn btn-secondary" id="manualBtn">✏️ 手动完成打卡</button>
 
         <div id="result">
-            <!-- 这里将来会显示打卡结果 -->
+            <!-- 打卡结果将显示在这里 -->
         </div>
     </div>
 
     <script>
-        // 这里是未来要添加的JavaScript代码
+        // 手动打卡功能
         document.getElementById('manualBtn').addEventListener('click', function() {
             const count = document.getElementById('sentenceCount').value;
             const resultDiv = document.getElementById('result');
@@ -202,9 +242,16 @@
             resultDiv.style.display = 'block';
         });
 
-        // 录音按钮的占位功能
+        // 录音按钮功能（待实现）
         document.getElementById('recordBtn').addEventListener('click', function() {
             alert('录音功能即将上线！下一步我们就来实现它。');
+        });
+
+        // 输入框回车键支持
+        document.getElementById('sentenceCount').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('manualBtn').click();
+            }
         });
     </script>
 </body>
