@@ -184,6 +184,16 @@
             display: block;
         }
 
+        .browser-warning {
+            background-color: #FEF3C7;
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
         .realtime-recognition {
             margin: 20px 0;
             padding: 20px;
@@ -271,6 +281,15 @@
             margin: 10px 0;
         }
 
+        .permission-guide {
+            background: #EFF6FF;
+            border: 1px solid #3B82F6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 15px;
@@ -288,6 +307,23 @@
     <div class="container">
         <h1>🌿 英语朗读打卡</h1>
         <p class="subtitle">实时语音识别 · 即时反馈</p>
+        
+        <!-- 浏览器兼容性提示 -->
+        <div id="browserWarning" class="browser-warning" style="display: none;">
+            <strong>⚠️ 浏览器兼容性提示</strong>
+            <p id="warningMessage"></p>
+        </div>
+
+        <!-- 权限使用指南 -->
+        <div class="permission-guide">
+            <strong>💡 使用指南：</strong>
+            <ol style="text-align: left; margin: 10px 0; padding-left: 20px;">
+                <li>点击"开始实时朗读"按钮</li>
+                <li><strong>允许浏览器使用麦克风</strong>（重要！）</li>
+                <li>开始朗读英文句子</li>
+                <li>实时查看识别结果和发音反馈</li>
+            </ol>
+        </div>
         
         <div class="goal-card">
             <h3>📚 今日朗读材料</h3>
@@ -352,6 +388,8 @@
         const detailedAnalysis = document.getElementById('detailedAnalysis');
         const recordingTimerDisplay = document.getElementById('recordingTimer');
         const resultDiv = document.getElementById('result');
+        const browserWarning = document.getElementById('browserWarning');
+        const warningMessage = document.getElementById('warningMessage');
 
         // 语音识别变量
         let recognition;
@@ -360,62 +398,137 @@
         let recordingTimer;
         let finalTranscript = '';
 
-        // 检查浏览器支持
-        function initializeSpeechRecognition() {
+        // 检查浏览器支持情况
+        function checkBrowserSupport() {
+            const isChrome = !!window.chrome;
+            const isEdge = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            const isFirefox = typeof InstallTrigger !== 'undefined';
+
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                showBrowserWarning('您的浏览器不支持语音识别功能。建议使用 <strong>Chrome、Edge 或 Safari</strong> 浏览器获得最佳体验。');
                 recordBtn.disabled = true;
-                recordBtn.innerHTML = '❌ 浏览器不支持语音识别';
+                recordBtn.innerHTML = '❌ 浏览器不支持';
+                return false;
+            }
+
+            if (isFirefox) {
+                showBrowserWarning('Firefox 浏览器对语音识别的支持有限，建议使用 Chrome 或 Edge 浏览器。');
+            }
+
+            if (isSafari) {
+                showBrowserWarning('Safari 浏览器需要用户手动允许麦克风权限，请确保在弹出窗口中点击"允许"。');
+            }
+
+            return true;
+        }
+
+        // 显示浏览器警告
+        function showBrowserWarning(message) {
+            warningMessage.innerHTML = message;
+            browserWarning.style.display = 'block';
+        }
+
+        // 初始化语音识别
+        function initializeSpeechRecognition() {
+            if (!checkBrowserSupport()) {
                 return null;
             }
 
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            
-            recognition.continuous = true;
-            recognition.interimResults = true;
-            recognition.lang = 'en-US';
-            recognition.maxAlternatives = 3;
+            try {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'en-US';
+                recognition.maxAlternatives = 3;
 
-            recognition.onstart = () => {
-                console.log('语音识别开始');
-            };
+                recognition.onstart = () => {
+                    console.log('✅ 语音识别开始');
+                    updateUIForRecording(true);
+                };
 
-            recognition.onresult = (event) => {
-                let interimTranscript = '';
-                finalTranscript = '';
+                recognition.onresult = (event) => {
+                    let interimTranscript = '';
+                    finalTranscript = '';
 
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    const transcript = event.results[i][0].transcript;
-                    if (event.results[i].isFinal) {
-                        finalTranscript += transcript + ' ';
-                    } else {
-                        interimTranscript += transcript;
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript + ' ';
+                        } else {
+                            interimTranscript += transcript;
+                        }
                     }
-                }
 
-                // 显示实时识别结果
-                displayRealTimeResult(finalTranscript || interimTranscript);
-            };
+                    // 显示实时识别结果
+                    displayRealTimeResult(finalTranscript || interimTranscript);
+                };
 
-            recognition.onerror = (event) => {
-                console.error('语音识别错误:', event.error);
-                if (event.error === 'not-allowed') {
-                    alert('请允许浏览器使用麦克风权限');
-                }
-            };
+                recognition.onerror = (event) => {
+                    console.error('语音识别错误:', event.error);
+                    handleRecognitionError(event.error);
+                };
 
-            recognition.onend = () => {
-                console.log('语音识别结束');
-                if (isRecording) {
-                    // 如果还在录音状态但识别结束了，重新开始
-                    recognition.start();
-                } else {
-                    // 分析最终结果
-                    analyzeFinalResult();
-                }
-            };
+                recognition.onend = () => {
+                    console.log('语音识别结束');
+                    if (isRecording) {
+                        // 如果还在录音状态但识别结束了，重新开始
+                        setTimeout(() => {
+                            if (isRecording) {
+                                recognition.start();
+                            }
+                        }, 100);
+                    } else {
+                        // 分析最终结果
+                        analyzeFinalResult();
+                    }
+                };
 
-            return recognition;
+                return recognition;
+            } catch (error) {
+                console.error('初始化语音识别失败:', error);
+                showBrowserWarning('语音识别初始化失败: ' + error.message);
+                return null;
+            }
+        }
+
+        // 处理识别错误
+        function handleRecognitionError(error) {
+            let errorMessage = '';
+            
+            switch (error) {
+                case 'not-allowed':
+                case 'permission-denied':
+                    errorMessage = '麦克风权限被拒绝。请点击地址栏旁边的摄像头图标，允许网站使用麦克风。';
+                    break;
+                case 'audio-capture':
+                    errorMessage = '没有检测到麦克风设备。请检查麦克风连接。';
+                    break;
+                case 'network':
+                    errorMessage = '网络错误，请检查网络连接。';
+                    break;
+                default:
+                    errorMessage = `识别错误: ${error}`;
+            }
+            
+            alert('❌ ' + errorMessage);
+            stopRecording();
+        }
+
+        // 更新录音状态UI
+        function updateUIForRecording(recording) {
+            if (recording) {
+                recordBtn.textContent = '⏹️ 停止朗读';
+                recordBtn.classList.add('btn-recording');
+                recordingStatus.style.display = 'block';
+                recognitionText.innerHTML = '<em style="color: var(--text-light);">请开始朗读...</em>';
+            } else {
+                recordBtn.textContent = '🎤 开始实时朗读';
+                recordBtn.classList.remove('btn-recording');
+                recordingStatus.style.display = 'none';
+            }
         }
 
         // 显示实时识别结果
@@ -428,90 +541,68 @@
 
         // 实时文本分析
         function analyzeRealTimeText(text) {
-            const words = text.split(' ');
+            const words = text.split(' ').filter(word => word.length > 0);
             let resultHTML = '';
-            let correctCount = 0;
-            let totalCompared = 0;
 
             words.forEach((word, index) => {
                 if (index < targetWords.length) {
                     const targetWord = targetWords[index];
-                    if (word === targetWord) {
+                    const similarity = calculateSimilarity(word, targetWord);
+                    
+                    if (similarity > 0.7) {
                         resultHTML += `<span class="word-correct">${word}</span> `;
-                        correctCount++;
-                    } else if (word.length > 0) {
-                        // 计算相似度
-                        const similarity = calculateSimilarity(word, targetWord);
-                        if (similarity > 0.6) {
-                            resultHTML += `<span class="word-correct">${word}</span> `;
-                            correctCount++;
-                        } else {
-                            resultHTML += `<span class="word-incorrect" title="应为: ${targetWord}">${word}</span> `;
-                        }
+                    } else if (similarity > 0.4) {
+                        resultHTML += `<span class="word-incorrect" title="相似度: ${Math.round(similarity * 100)}% (应为: ${targetWord})">${word}</span> `;
                     } else {
-                        resultHTML += `<span class="word-missing">[?]</span> `;
+                        resultHTML += `<span class="word-incorrect" title="应为: ${targetWord}">${word}</span> `;
                     }
-                    totalCompared++;
                 } else {
-                    // 多余的词
-                    resultHTML += `<span class="word-extra">${word}</span> `;
+                    resultHTML += `<span class="word-extra" title="多余单词">${word}</span> `;
                 }
             });
 
-            // 添加缺失的词
-            for (let i = words.length; i < targetWords.length; i++) {
-                resultHTML += `<span class="word-missing">${targetWords[i]}</span> `;
+            // 添加缺失的词提示
+            if (words.length < targetWords.length) {
+                resultHTML += `<span style="color: var(--text-light);">[...]</span>`;
             }
 
-            return resultHTML;
+            return resultHTML || '<em style="color: var(--text-light);">正在识别中...</em>';
         }
 
         // 计算单词相似度
         function calculateSimilarity(word1, word2) {
+            if (!word1 || !word2) return 0;
+            
             const longer = word1.length > word2.length ? word1 : word2;
             const shorter = word1.length > word2.length ? word2 : word1;
             
             if (longer.length === 0) return 1.0;
             
-            return (longer.length - editDistance(longer, shorter)) / parseFloat(longer.length);
-        }
-
-        // 编辑距离算法
-        function editDistance(s1, s2) {
-            s1 = s1.toLowerCase();
-            s2 = s2.toLowerCase();
-
-            const costs = [];
-            for (let i = 0; i <= s1.length; i++) {
-                let lastValue = i;
-                for (let j = 0; j <= s2.length; j++) {
-                    if (i === 0) {
-                        costs[j] = j;
-                    } else if (j > 0) {
-                        let newValue = costs[j - 1];
-                        if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
-                            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-                        }
-                        costs[j - 1] = lastValue;
-                        lastValue = newValue;
-                    }
-                }
-                if (i > 0) costs[s2.length] = lastValue;
+            // 简单相似度计算
+            if (word1 === word2) return 1.0;
+            if (word1.includes(word2) || word2.includes(word1)) return 0.8;
+            
+            // 字符匹配率
+            let matches = 0;
+            for (let i = 0; i < Math.min(word1.length, word2.length); i++) {
+                if (word1[i] === word2[i]) matches++;
             }
-            return costs[s2.length];
+            
+            return matches / Math.max(word1.length, word2.length);
         }
 
         // 分析最终结果
         function analyzeFinalResult() {
-            const userWords = finalTranscript.toLowerCase().trim().split(/\s+/);
-            const targetWords = targetSentence.split(' ');
-            
+            if (!finalTranscript.trim()) {
+                recognitionText.innerHTML = '<em style="color: var(--error);">未检测到语音，请重试</em>';
+                return;
+            }
+
+            const userWords = finalTranscript.toLowerCase().trim().split(/\s+/).filter(word => word.length > 0);
             let correctCount = 0;
             let missingWords = [];
             let wrongWords = [];
-            let extraWords = [];
 
-            // 分析每个目标单词
             targetWords.forEach((targetWord, index) => {
                 if (index < userWords.length) {
                     const userWord = userWords[index];
@@ -523,49 +614,34 @@
                         wrongWords.push({
                             user: userWord,
                             target: targetWord,
-                            position: index + 1
+                            similarity: Math.round(similarity * 100)
                         });
                     }
                 } else {
-                    missingWords.push({
-                        word: targetWord,
-                        position: index + 1
-                    });
+                    missingWords.push(targetWord);
                 }
             });
 
-            // 检查多余单词
-            if (userWords.length > targetWords.length) {
-                for (let i = targetWords.length; i < userWords.length; i++) {
-                    extraWords.push(userWords[i]);
-                }
-            }
-
-            const accuracy = (correctCount / targetWords.length) * 100;
-            
-            displayAnalysisResult(accuracy, missingWords, wrongWords, extraWords);
+            const accuracy = userWords.length > 0 ? (correctCount / targetWords.length) * 100 : 0;
+            displayAnalysisResult(accuracy, missingWords, wrongWords, userWords);
         }
 
         // 显示分析结果
-        function displayAnalysisResult(accuracy, missingWords, wrongWords, extraWords) {
+        function displayAnalysisResult(accuracy, missingWords, wrongWords, userWords) {
             accuracyScore.innerHTML = `发音准确率: ${accuracy.toFixed(1)}%`;
             
             let analysisHTML = '';
             
             if (missingWords.length > 0) {
-                analysisHTML += `<div>❌ <strong>缺失单词:</strong> ${missingWords.map(w => `"${w.word}"(第${w.position}个)`).join(', ')}</div>`;
+                analysisHTML += `<div>❌ <strong>缺失单词:</strong> ${missingWords.map(w => `"${w}"`).join(', ')}</div>`;
             }
             
             if (wrongWords.length > 0) {
-                analysisHTML += `<div>⚠️ <strong>发音不准:</strong> ${wrongWords.map(w => `"${w.user}"→"${w.target}"`).join(', ')}</div>`;
-            }
-            
-            if (extraWords.length > 0) {
-                analysisHTML += `<div>🔍 <strong>多余单词:</strong> ${extraWords.map(w => `"${w}"`).join(', ')}</div>`;
+                analysisHTML += `<div>⚠️ <strong>需要改进:</strong> ${wrongWords.map(w => `"${w.user}"→"${w.target}"`).join(', ')}</div>`;
             }
 
             if (accuracy >= 80) {
-                analysisHTML += `<div style="margin-top: 10px; color: var(--success);">🎉 发音很棒！继续努力！</div>`;
+                analysisHTML += `<div style="margin-top: 10px; color: var(--success);">🎉 发音很棒！继续保持！</div>`;
             } else if (accuracy >= 60) {
                 analysisHTML += `<div style="margin-top: 10px; color: var(--warning);">👍 还不错，注意个别单词的发音</div>`;
             } else {
@@ -577,29 +653,16 @@
             submitBtn.style.display = 'block';
         }
 
-        // 开始/停止录音
-        recordBtn.addEventListener('click', function() {
-            if (!isRecording) {
-                // 初始化语音识别
-                if (!recognition) {
-                    recognition = initializeSpeechRecognition();
-                    if (!recognition) return;
-                }
+        // 开始录音
+        function startRecording() {
+            if (!recognition) {
+                recognition = initializeSpeechRecognition();
+                if (!recognition) return;
+            }
 
-                // 开始识别
+            try {
                 recognition.start();
                 isRecording = true;
-                
-                // 更新UI
-                recordBtn.textContent = '⏹️ 停止朗读';
-                recordBtn.classList.add('btn-recording');
-                recordingStatus.style.display = 'block';
-                
-                // 重置状态
-                finalTranscript = '';
-                recognitionText.innerHTML = '<em style="color: var(--text-light);">请开始朗读...</em>';
-                analysisResult.style.display = 'none';
-                submitBtn.style.display = 'none';
                 
                 // 开始计时
                 recordingSeconds = 0;
@@ -608,18 +671,28 @@
                     recordingTimerDisplay.textContent = recordingSeconds;
                 }, 1000);
                 
-            } else {
-                // 停止识别
+            } catch (error) {
+                console.error('启动录音失败:', error);
+                alert('启动录音失败: ' + error.message);
+            }
+        }
+
+        // 停止录音
+        function stopRecording() {
+            isRecording = false;
+            if (recognition) {
                 recognition.stop();
-                isRecording = false;
-                
-                // 更新UI
-                recordBtn.textContent = '🎤 开始实时朗读';
-                recordBtn.classList.remove('btn-recording');
-                recordingStatus.style.display = 'none';
-                
-                // 停止计时
-                clearInterval(recordingTimer);
+            }
+            clearInterval(recordingTimer);
+            updateUIForRecording(false);
+        }
+
+        // 开始/停止录音
+        recordBtn.addEventListener('click', function() {
+            if (!isRecording) {
+                startRecording();
+            } else {
+                stopRecording();
             }
         });
 
@@ -632,7 +705,7 @@
                 <p>记录了 <strong>${count}</strong> 个句子的朗读。</p>
                 <p><strong>朗读时长：</strong>${recordingSeconds}秒</p>
                 <p><strong>实时识别：</strong>已启用</p>
-                <p><em>（体验如微信般的实时语音转文字）</em></p>
+                <p><em>体验如微信般的实时语音转文字</em></p>
             `;
             resultDiv.className = 'success';
             resultDiv.style.display = 'block';
@@ -649,4 +722,19 @@
                 <p>记录了 <strong>${count}</strong> 个句子的朗读。</p>
                 <p><em>（手动打卡模式）</em></p>
             `;
-            result
+            resultDiv.className = 'success';
+            resultDiv.style.display = 'block';
+        });
+
+        // 输入框回车支持
+        document.getElementById('sentenceCount').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') manualBtn.click();
+        });
+
+        // 页面加载时检查支持情况
+        document.addEventListener('DOMContentLoaded', function() {
+            checkBrowserSupport();
+        });
+    </script>
+</body>
+</html>
