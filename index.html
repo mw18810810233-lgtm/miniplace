@@ -9,6 +9,8 @@
             --primary: #10B981;
             --primary-light: #A7F3D0;
             --success: #059669;
+            --warning: #F59E0B;
+            --error: #EF4444;
             --background: #F0FDF4;
             --surface: #FFFFFF;
             --text: #064E3B;
@@ -19,15 +21,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        .logo {
-            width: 40px;
-            height: 40px;
-            vertical-align: middle;
-            margin-right: 12px;
-            border-radius: 8px;
-            object-fit: contain;
         }
 
         body {
@@ -59,9 +52,6 @@
             margin-bottom: 10px;
             font-weight: 600;
             font-size: 1.8em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .subtitle {
@@ -153,10 +143,22 @@
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background-color: #0DA271;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background-color: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-recording {
+            background-color: var(--error);
+            animation: pulse 1.5s infinite;
         }
 
         .btn-secondary {
@@ -168,6 +170,32 @@
         .btn-secondary:hover {
             background-color: #F7FAFC;
             border-color: var(--primary-light);
+        }
+
+        .recording-status {
+            text-align: center;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .recording-active {
+            background-color: #FEF3C7;
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            display: block;
+        }
+
+        .audio-playback {
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-playback audio {
+            width: 100%;
+            margin: 10px 0;
         }
 
         #result {
@@ -196,6 +224,12 @@
             }
         }
 
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 15px;
@@ -206,17 +240,12 @@
             h1 {
                 font-size: 1.5em;
             }
-            .logo {
-                width: 32px;
-                height: 32px;
-                margin-right: 8px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><img src="./mylogo.png" alt="英语朗读打卡" class="logo">英语朗读打卡</h1>
+        <h1>🌿 英语朗读打卡</h1>
         <p class="subtitle">记录每一天的进步，遇见更好的自己</p>
         
         <div class="goal-card">
@@ -235,8 +264,22 @@
             <input type="number" id="sentenceCount" value="1" min="1">
         </div>
 
+        <!-- 录音状态显示 -->
+        <div id="recordingStatus" class="recording-status">
+            <div>● 录音中... <span id="recordingTimer">0</span>秒</div>
+            <small>请开始朗读上面的英文句子</small>
+        </div>
+
+        <!-- 录音播放 -->
+        <div id="audioPlayback" class="audio-playback">
+            <h4>🎵 您的录音</h4>
+            <audio id="audioPlayer" controls></audio>
+            <p><small>确认无误后点击"完成打卡"</small></p>
+        </div>
+
         <button class="btn btn-primary" id="recordBtn">🎤 开始录音朗读</button>
         <button class="btn btn-secondary" id="manualBtn">✏️ 手动完成打卡</button>
+        <button class="btn btn-primary" id="submitBtn" style="display: none;" disabled>✅ 完成打卡</button>
 
         <div id="result">
             <!-- 打卡结果将显示在这里 -->
@@ -244,26 +287,129 @@
     </div>
 
     <script>
-        document.getElementById('manualBtn').addEventListener('click', function() {
+        // 录音相关变量
+        let mediaRecorder;
+        let audioChunks = [];
+        let recordingTimer;
+        let recordingSeconds = 0;
+        let isRecording = false;
+
+        // DOM 元素
+        const recordBtn = document.getElementById('recordBtn');
+        const manualBtn = document.getElementById('manualBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const recordingStatus = document.getElementById('recordingStatus');
+        const audioPlayback = document.getElementById('audioPlayback');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const recordingTimerDisplay = document.getElementById('recordingTimer');
+        const resultDiv = document.getElementById('result');
+
+        // 开始录音
+        recordBtn.addEventListener('click', async function() {
+            if (!isRecording) {
+                try {
+                    // 请求麦克风权限
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    
+                    // 创建 MediaRecorder 实例
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    
+                    // 收集音频数据
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+                    
+                    // 录音完成
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        
+                        // 显示录音播放器
+                        audioPlayer.src = audioUrl;
+                        audioPlayback.style.display = 'block';
+                        
+                        // 启用提交按钮
+                        submitBtn.disabled = false;
+                        
+                        // 停止所有音轨
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+                    
+                    // 开始录音
+                    mediaRecorder.start();
+                    isRecording = true;
+                    
+                    // 更新UI
+                    recordBtn.textContent = '⏹️ 停止录音';
+                    recordBtn.classList.add('btn-recording');
+                    recordingStatus.className = 'recording-status recording-active';
+                    
+                    // 开始计时器
+                    recordingSeconds = 0;
+                    recordingTimer = setInterval(() => {
+                        recordingSeconds++;
+                        recordingTimerDisplay.textContent = recordingSeconds;
+                    }, 1000);
+                    
+                } catch (error) {
+                    console.error('录音错误:', error);
+                    alert('无法访问麦克风，请确保已授予录音权限。');
+                }
+            } else {
+                // 停止录音
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                // 更新UI
+                recordBtn.textContent = '🎤 开始录音朗读';
+                recordBtn.classList.remove('btn-recording');
+                recordingStatus.className = 'recording-status';
+                
+                // 停止计时器
+                clearInterval(recordingTimer);
+                
+                // 显示提交按钮
+                submitBtn.style.display = 'block';
+            }
+        });
+
+        // 完成打卡（录音模式）
+        submitBtn.addEventListener('click', function() {
             const count = document.getElementById('sentenceCount').value;
-            const resultDiv = document.getElementById('result');
             
             resultDiv.innerHTML = `
                 <h3>✅ 打卡成功！</h3>
                 <p>记录了 <strong>${count}</strong> 个句子的朗读。</p>
-                <p><em>（手动打卡模式 - 下一步我们将加入语音识别）</em></p>
+                <p><strong>录音时长：</strong>${recordingSeconds}秒</p>
+                <p><em>（录音功能已实现！下一步我们将添加语音识别）</em></p>
+            `;
+            resultDiv.className = 'success';
+            resultDiv.style.display = 'block';
+            
+            // 重置录音状态
+            submitBtn.style.display = 'none';
+            submitBtn.disabled = true;
+            audioPlayback.style.display = 'none';
+        });
+
+        // 手动打卡功能
+        manualBtn.addEventListener('click', function() {
+            const count = document.getElementById('sentenceCount').value;
+            
+            resultDiv.innerHTML = `
+                <h3>✅ 打卡成功！</h3>
+                <p>记录了 <strong>${count}</strong> 个句子的朗读。</p>
+                <p><em>（手动打卡模式）</em></p>
             `;
             resultDiv.className = 'success';
             resultDiv.style.display = 'block';
         });
 
-        document.getElementById('recordBtn').addEventListener('click', function() {
-            alert('录音功能即将上线！下一步我们就来实现它。');
-        });
-
+        // 输入框回车键支持
         document.getElementById('sentenceCount').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                document.getElementById('manualBtn').click();
+                manualBtn.click();
             }
         });
     </script>
