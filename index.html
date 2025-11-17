@@ -38,6 +38,7 @@
             border-radius: 20px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
             overflow: hidden;
+            min-height: 600px;
         }
 
         .header {
@@ -68,6 +69,50 @@
             width: 0%;
         }
 
+        /* 视频库样式 */
+        .video-library {
+            padding: 20px;
+        }
+
+        .video-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            border: 2px solid #E2E8F0;
+            border-radius: 15px;
+            padding: 25px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .video-card p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .video-meta {
+            color: var(--text-light);
+            font-size: 0.9em;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
         /* 句子练习区域 */
         .practice-area {
             padding: 30px;
@@ -94,7 +139,7 @@
 
         .sentence-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
@@ -298,7 +343,7 @@
                 padding: 20px;
             }
             
-            .practice-area {
+            .practice-area, .video-library {
                 padding: 20px;
             }
             
@@ -314,149 +359,253 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .video-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 头部 -->
-        <div class="header">
-            <h1>🎤 英语跟读练习</h1>
-            <p>逐句练习，AI智能评分</p>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div id="progressText">0/0 句完成</div>
-        </div>
-
-        <!-- 练习区域 -->
-        <div class="practice-area">
-            <div id="sentencesContainer">
-                <!-- 句子卡片将通过JavaScript动态生成 -->
-            </div>
-
-            <!-- 录音可视化 -->
-            <div class="recording-visual" id="recordingVisual" style="display: none;">
-                <div class="waveform" id="waveform">
-                    <!-- 声波纹将通过JavaScript动态生成 -->
-                </div>
-                <div class="recording-timer" id="recordingTimer">00:00</div>
-                <div class="recording-status">
-                    ● 正在录音中... 点击"结束朗读"完成录音
-                </div>
-                <button class="btn btn-recording" id="stopRecordingBtn">
-                    ⏹️ 结束朗读
-                </button>
-            </div>
-
-            <!-- 评分结果 -->
-            <div class="score-result" id="scoreResult" style="display: none;">
-                <h3>🎯 发音评分</h3>
-                <div class="score-number" id="scoreNumber">0</div>
-                <div class="feedback" id="scoreFeedback"></div>
-                
-                <div class="pronunciation-tips">
-                    <h4>💡 发音建议</h4>
-                    <div id="pronunciationTips">
-                        <!-- 发音建议将通过JavaScript动态生成 -->
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary" onclick="nextSentence()">
-                    ➡️ 下一句
-                </button>
-            </div>
-        </div>
-
-        <!-- 导航 -->
-        <div class="navigation">
-            <button class="btn btn-secondary" onclick="goBack()">
-                ← 返回视频库
-            </button>
-            <button class="btn btn-primary" id="completeBtn" style="display: none;">
-                ✅ 完成练习
-            </button>
-        </div>
+    <div class="container" id="appContainer">
+        <!-- 内容将通过JavaScript动态渲染 -->
     </div>
 
     <script>
-        // 示例练习数据
-        const practiceData = {
-            title: "小猪佩奇 - 国际日",
-            sentences: [
-                {
-                    text: "Hello, my name is Peppa Pig.",
-                    translation: "你好，我叫小猪佩奇。",
-                    difficulty: "easy",
-                    tips: [
-                        "注意 'Hello' 的 /h/ 发音要轻",
-                        "'Peppa' 的重音在第一个音节",
-                        "'Pig' 的 /ɪ/ 发音要短促"
-                    ]
-                },
-                {
-                    text: "This is my little brother, George.",
-                    translation: "这是我的弟弟乔治。",
-                    difficulty: "medium",
-                    tips: [
-                        "'little' 的 /l/ 发音要清晰",
-                        "'brother' 的 /ð/ 发音要注意",
-                        "注意句子中的连读"
-                    ]
-                },
-                {
-                    text: "We are going to the playground today.",
-                    translation: "我们今天要去游乐场。",
-                    difficulty: "medium",
-                    tips: [
-                        "'going to' 可以连读为 'gonna'",
-                        "'playground' 是复合词，注意重音",
-                        "注意 'today' 的发音"
-                    ]
-                },
-                {
-                    text: "What's your favorite color?",
-                    translation: "你最喜欢什么颜色？",
-                    difficulty: "easy",
-                    tips: [
-                        "'What's' 是 'What is' 的缩写",
-                        "'favorite' 的美式发音",
-                        "疑问句要用升调"
-                    ]
-                },
-                {
-                    text: "I like jumping in muddy puddles!",
-                    translation: "我喜欢在泥坑里跳来跳去！",
-                    difficulty: "hard",
-                    tips: [
-                        "'jumping' 的 /dʒ/ 发音",
-                        "'muddy puddles' 的连读",
-                        "注意表达兴奋的语气"
-                    ]
-                }
-            ]
-        };
-
-        // 状态变量
+        // 应用状态
+        let currentView = 'video-library'; // 'video-library' | 'practice'
         let currentSentenceIndex = 0;
         let isRecording = false;
         let recordingTimer = null;
         let recordingSeconds = 0;
         let waveAnimation = null;
 
+        // 示例数据
+        const videoLibrary = [
+            {
+                id: 'peppa',
+                title: '🐷 小猪佩奇 - 国际日',
+                description: '适合初级学习者，简单对话练习',
+                level: '初级',
+                duration: '15分钟',
+                rating: '5.0',
+                learners: '2.3k',
+                sentences: [
+                    {
+                        text: "Hello, my name is Peppa Pig.",
+                        translation: "你好，我叫小猪佩奇。",
+                        difficulty: "easy",
+                        tips: [
+                            "注意 'Hello' 的 /h/ 发音要轻",
+                            "'Peppa' 的重音在第一个音节",
+                            "'Pig' 的 /ɪ/ 发音要短促"
+                        ]
+                    },
+                    {
+                        text: "This is my little brother, George.",
+                        translation: "这是我的弟弟乔治。",
+                        difficulty: "medium",
+                        tips: [
+                            "'little' 的 /l/ 发音要清晰",
+                            "'brother' 的 /ð/ 发音要注意",
+                            "注意句子中的连读"
+                        ]
+                    },
+                    {
+                        text: "We are going to the playground today.",
+                        translation: "我们今天要去游乐场。",
+                        difficulty: "medium",
+                        tips: [
+                            "'going to' 可以连读为 'gonna'",
+                            "'playground' 是复合词，注意重音",
+                            "注意 'today' 的发音"
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'friends',
+                title: '👫 老友记 - 咖啡厅对话',
+                description: '日常英语对话练习',
+                level: '中级',
+                duration: '25分钟',
+                rating: '4.8',
+                learners: '5.1k',
+                sentences: [
+                    {
+                        text: "How you doin'?",
+                        translation: "最近怎么样？",
+                        difficulty: "easy",
+                        tips: [
+                            "注意口语化的缩写",
+                            "语气要轻松友好",
+                            "尾音稍微上扬"
+                        ]
+                    },
+                    {
+                        text: "We were on a break!",
+                        translation: "我们当时在分手期！",
+                        difficulty: "medium",
+                        tips: [
+                            "表达强烈情感",
+                            "'break' 发音要清晰",
+                            "注意重音位置"
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // 渲染应用
+        function renderApp() {
+            const container = document.getElementById('appContainer');
+            
+            if (currentView === 'video-library') {
+                container.innerHTML = renderVideoLibrary();
+            } else if (currentView === 'practice') {
+                container.innerHTML = renderPractice();
+                // 初始化练习
+                setTimeout(() => {
+                    initializePractice();
+                }, 0);
+            }
+        }
+
+        // 渲染视频库
+        function renderVideoLibrary() {
+            return `
+                <div class="header">
+                    <h1>📚 英语学习视频库</h1>
+                    <p>选择视频开始跟读练习</p>
+                </div>
+                
+                <div class="video-library">
+                    <div class="video-grid">
+                        ${videoLibrary.map(video => `
+                            <div class="video-card" onclick="startPractice('${video.id}')">
+                                <h3>${video.title}</h3>
+                                <p>${video.description}</p>
+                                <div class="video-meta">
+                                    <span>⭐ ${video.rating}</span>
+                                    <span>📊 ${video.level}</span>
+                                    <span>🕒 ${video.duration}</span>
+                                    <span>👥 ${video.learners}人学习</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 渲染练习页面
+        function renderPractice() {
+            const currentVideo = videoLibrary.find(v => v.id === currentPracticeVideo);
+            
+            return `
+                <div class="header">
+                    <h1>🎤 英语跟读练习</h1>
+                    <p>${currentVideo ? currentVideo.title : '跟读练习'}</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div id="progressText">0/0 句完成</div>
+                </div>
+
+                <div class="practice-area">
+                    <div id="sentencesContainer">
+                        <!-- 句子卡片将通过JavaScript动态生成 -->
+                    </div>
+
+                    <!-- 录音可视化 -->
+                    <div class="recording-visual" id="recordingVisual" style="display: none;">
+                        <div class="waveform" id="waveform">
+                            <!-- 声波纹将通过JavaScript动态生成 -->
+                        </div>
+                        <div class="recording-timer" id="recordingTimer">00:00</div>
+                        <div class="recording-status">
+                            ● 正在录音中... 点击"结束朗读"完成录音
+                        </div>
+                        <button class="btn btn-recording" id="stopRecordingBtn">
+                            ⏹️ 结束朗读
+                        </button>
+                    </div>
+
+                    <!-- 评分结果 -->
+                    <div class="score-result" id="scoreResult" style="display: none;">
+                        <h3>🎯 发音评分</h3>
+                        <div class="score-number" id="scoreNumber">0</div>
+                        <div class="feedback" id="scoreFeedback"></div>
+                        
+                        <div class="pronunciation-tips">
+                            <h4>💡 发音建议</h4>
+                            <div id="pronunciationTips">
+                                <!-- 发音建议将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="nextSentence()">
+                            ➡️ 下一句
+                        </button>
+                        <button class="btn btn-secondary" onclick="repeatSentence()" style="margin-top: 10px;">
+                            🔄 重复练习此句
+                        </button>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="goBack()">
+                        ← 返回视频库
+                    </button>
+                    <button class="btn btn-primary" id="completeBtn" style="display: none;">
+                        ✅ 完成练习
+                    </button>
+                </div>
+            `;
+        }
+
+        // 开始练习
+        let currentPracticeVideo = null;
+        function startPractice(videoId) {
+            currentPracticeVideo = videoId;
+            currentView = 'practice';
+            currentSentenceIndex = 0;
+            renderApp();
+        }
+
+        // 返回视频库
+        function goBack() {
+            if (currentView === 'practice') {
+                if (confirm('确定要返回视频库吗？当前进度将不会保存。')) {
+                    currentView = 'video-library';
+                    renderApp();
+                }
+            }
+        }
+
         // 初始化练习
         function initializePractice() {
             renderSentences();
             updateProgress();
             createWaveform();
+            
+            // 设置事件监听
+            const stopRecordingBtn = document.getElementById('stopRecordingBtn');
+            if (stopRecordingBtn) {
+                stopRecordingBtn.addEventListener('click', stopRecording);
+            }
         }
 
         // 渲染所有句子
         function renderSentences() {
             const container = document.getElementById('sentencesContainer');
+            const currentVideo = videoLibrary.find(v => v.id === currentPracticeVideo);
+            if (!currentVideo) return;
+            
             let html = '';
             
-            practiceData.sentences.forEach((sentence, index) => {
+            currentVideo.sentences.forEach((sentence, index) => {
                 const isActive = index === currentSentenceIndex;
                 const isCompleted = index < currentSentenceIndex;
                 
@@ -504,15 +653,9 @@
 
         // 播放AI朗读示范
         function playDemonstration(index) {
-            const sentence = practiceData.sentences[index];
-            
-            // 模拟AI朗读（在实际应用中会使用TTS API）
+            const currentVideo = videoLibrary.find(v => v.id === currentPracticeVideo);
+            const sentence = currentVideo.sentences[index];
             alert(`AI朗读示范: "${sentence.text}"\n\n在实际完整版本中，这里会播放AI语音。`);
-            
-            // 这里可以集成真实的TTS服务，比如：
-            // - Web Speech API
-            // - Azure Cognitive Services
-            // - Google Text-to-Speech
         }
 
         // 开始录音
@@ -531,13 +674,6 @@
             
             // 开始声波纹动画
             startWaveAnimation();
-            
-            // 在实际应用中，这里会调用真实的录音API
-            // navigator.mediaDevices.getUserMedia({ audio: true })
-            //   .then(stream => {
-            //       mediaRecorder = new MediaRecorder(stream);
-            //       mediaRecorder.start();
-            //   });
         }
 
         // 停止录音
@@ -560,13 +696,9 @@
             setTimeout(() => {
                 showScoreResult();
             }, 2000);
-            
-            // 在实际应用中，这里会停止录音并发送到语音识别API
-            // mediaRecorder.stop();
-            // 然后调用语音识别服务分析发音
         }
 
-        // 开始录音计时
+        // 录音计时器
         function startRecordingTimer() {
             recordingSeconds = 0;
             recordingTimer = setInterval(() => {
@@ -578,7 +710,6 @@
             }, 1000);
         }
 
-        // 停止录音计时
         function stopRecordingTimer() {
             if (recordingTimer) {
                 clearInterval(recordingTimer);
@@ -586,7 +717,7 @@
             }
         }
 
-        // 创建声波纹
+        // 声波纹动画
         function createWaveform() {
             const waveform = document.getElementById('waveform');
             waveform.innerHTML = '';
@@ -599,7 +730,6 @@
             }
         }
 
-        // 开始声波纹动画
         function startWaveAnimation() {
             const bars = document.querySelectorAll('.wave-bar');
             waveAnimation = setInterval(() => {
@@ -611,14 +741,12 @@
             }, 100);
         }
 
-        // 停止声波纹动画
         function stopWaveAnimation() {
             if (waveAnimation) {
                 clearInterval(waveAnimation);
                 waveAnimation = null;
             }
             
-            // 重置声波纹
             const bars = document.querySelectorAll('.wave-bar');
             bars.forEach(bar => {
                 bar.style.height = '10px';
@@ -626,7 +754,7 @@
             });
         }
 
-        // 显示分析中的状态
+        // 显示分析状态
         function showAnalyzingState() {
             const sentenceCard = document.getElementById(`sentence-${currentSentenceIndex}`);
             sentenceCard.innerHTML = `
@@ -640,7 +768,8 @@
 
         // 显示评分结果
         function showScoreResult() {
-            // 生成随机分数（70-95）
+            const currentVideo = videoLibrary.find(v => v.id === currentPracticeVideo);
+            const currentSentence = currentVideo.sentences[currentSentenceIndex];
             const score = Math.floor(Math.random() * 25) + 70;
             
             // 更新分数显示
@@ -653,7 +782,6 @@
                 score >= 80 ? 'score-good' : 'score-poor'
             }`;
             
-            // 根据分数显示不同的反馈
             if (score >= 90) {
                 scoreFeedback.innerHTML = '🎉 太棒了！发音非常标准！';
             } else if (score >= 80) {
@@ -663,7 +791,6 @@
             }
             
             // 显示发音建议
-            const currentSentence = practiceData.sentences[currentSentenceIndex];
             const tipsHtml = currentSentence.tips.map(tip => `
                 <div class="tip-item">
                     <span class="tip-icon">•</span>
@@ -672,47 +799,50 @@
             `).join('');
             
             document.getElementById('pronunciationTips').innerHTML = tipsHtml;
-            
-            // 显示评分结果
             document.getElementById('scoreResult').style.display = 'block';
-            
-            // 更新进度
             updateProgress();
         }
 
         // 下一句
         function nextSentence() {
-            // 隐藏当前句子的评分结果
             document.getElementById('scoreResult').style.display = 'none';
             
-            // 标记当前句子为完成
             const currentCard = document.getElementById(`sentence-${currentSentenceIndex}`);
             currentCard.classList.remove('active');
             currentCard.classList.add('completed');
             currentCard.style.display = 'none';
             
-            // 显示下一句
             currentSentenceIndex++;
             
-            if (currentSentenceIndex < practiceData.sentences.length) {
+            const currentVideo = videoLibrary.find(v => v.id === currentPracticeVideo);
+            if (currentSentenceIndex < currentVideo.sentences.length) {
                 const nextCard = document.getElementById(`sentence-${currentSentenceIndex}`);
                 nextCard.classList.add('active');
                 nextCard.style.display = 'block';
-                
-                // 恢复录音按钮
                 document.getElementById(`recordBtn-${currentSentenceIndex}`).style.display = 'flex';
             } else {
-                // 所有句子完成
                 showCompletion();
             }
             
             updateProgress();
         }
 
+        // 重复当前句子
+        function repeatSentence() {
+            document.getElementById('scoreResult').style.display = 'none';
+            document.getElementById(`recordBtn-${currentSentenceIndex}`).style.display = 'flex';
+            
+            // 重新渲染当前句子
+            const currentCard = document.getElementById(`sentence-${currentSentenceIndex}`);
+            currentCard.classList.remove('completed');
+            currentCard.classList.add('active');
+        }
+
         // 显示完成界面
         function showCompletion() {
             const container = document.getElementById('sentencesContainer');
-            const totalScore = Math.floor(Math.random() * 20) + 80; // 模拟总分
+            const totalScore = Math.floor(Math.random() * 20) + 80;
+            const currentVideo = videoLibrary.find(v => v.id === currentPracticeVideo);
             
             container.innerHTML = `
                 <div style="text-align: center; padding: 60px 20px;">
@@ -722,9 +852,9 @@
                         ${totalScore}分
                     </div>
                     <p style="color: var(--text-light); margin-bottom: 30px;">
-                        您完成了 ${practiceData.sentences.length} 句跟读练习
+                        您完成了 ${currentVideo.sentences.length} 句跟读练习
                     </p>
-                    <div style="display: flex; gap: 10px; justify-content: center;">
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                         <button class="btn btn-primary" onclick="restartPractice()">
                             🔄 重新练习
                         </button>
@@ -746,10 +876,11 @@
 
         // 更新进度
         function updateProgress() {
-            const progress = (currentSentenceIndex / practiceData.sentences.length) * 100;
+            const currentVideo = videoLibrary.find(v => v.id === currentPracticeVideo);
+            const progress = (currentSentenceIndex / currentVideo.sentences.length) * 100;
             document.getElementById('progressFill').style.width = `${progress}%`;
             document.getElementById('progressText').textContent = 
-                `${currentSentenceIndex}/${practiceData.sentences.length} 句完成`;
+                `${currentSentenceIndex}/${currentVideo.sentences.length} 句完成`;
         }
 
         // 工具函数
@@ -762,18 +893,9 @@
             return texts[difficulty] || difficulty;
         }
 
-        function goBack() {
-            // 在实际应用中，这里会返回视频库
-            alert('返回视频库');
-        }
-
-        // 初始化
+        // 初始化应用
         document.addEventListener('DOMContentLoaded', function() {
-            // 设置停止录音按钮的点击事件
-            document.getElementById('stopRecordingBtn').addEventListener('click', stopRecording);
-            
-            // 初始化练习
-            initializePractice();
+            renderApp();
         });
     </script>
 </body>
