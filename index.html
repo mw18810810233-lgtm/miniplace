@@ -32,9 +32,6 @@
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .container {
@@ -187,44 +184,52 @@
             display: block;
         }
 
-        .processing-status {
-            background-color: #E0F2FE;
-            border: 1px solid #0EA5E9;
-            color: #0C4A6E;
-            display: block;
-        }
-
-        .audio-playback {
-            margin: 20px 0;
-            text-align: center;
-            display: none;
-        }
-
-        .audio-playback audio {
-            width: 100%;
-            margin: 10px 0;
-        }
-
-        .recognition-result {
+        .realtime-recognition {
             margin: 20px 0;
             padding: 20px;
             border-radius: 12px;
             background-color: #F8FAFC;
             border: 1px solid #E2E8F0;
-            display: none;
+            min-height: 100px;
         }
 
-        .result-show {
-            display: block;
-            animation: fadeIn 0.5s ease;
+        .recognition-text {
+            font-size: 16px;
+            line-height: 1.8;
+            min-height: 60px;
         }
 
-        .keyword-match {
-            background-color: var(--success);
-            color: white;
-            padding: 2px 6px;
+        .word-correct {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .word-incorrect {
+            color: var(--error);
+            background-color: #FEE2E2;
+            padding: 2px 4px;
             border-radius: 4px;
-            margin: 0 2px;
+            font-weight: 600;
+        }
+
+        .word-missing {
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        .word-extra {
+            color: var(--warning);
+            background-color: #FEF3C7;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .analysis-result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #E0F2FE;
+            border: 1px solid #0EA5E9;
         }
 
         #result {
@@ -259,6 +264,13 @@
             100% { opacity: 1; }
         }
 
+        .accuracy-score {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 15px;
@@ -275,11 +287,11 @@
 <body>
     <div class="container">
         <h1>🌿 英语朗读打卡</h1>
-        <p class="subtitle">记录每一天的进步，遇见更好的自己</p>
+        <p class="subtitle">实时语音识别 · 即时反馈</p>
         
         <div class="goal-card">
             <h3>📚 今日朗读材料</h3>
-            <p><em>"The future belongs to those who believe in the beauty of their dreams."</em> — Eleanor Roosevelt</p>
+            <p><em id="targetSentence">"The future belongs to those who believe in the beauty of their dreams."</em> — Eleanor Roosevelt</p>
             <div class="keywords">
                 <span class="keyword">future</span>
                 <span class="keyword">believe</span>
@@ -295,30 +307,26 @@
 
         <!-- 录音状态显示 -->
         <div id="recordingStatus" class="recording-status">
-            <div>● 录音中... <span id="recordingTimer">0</span>秒</div>
-            <small>请开始朗读上面的英文句子</small>
+            <div>● 实时识别中... <span id="recordingTimer">0</span>秒</div>
+            <small>请朗读上面的英文句子，文字将实时显示</small>
         </div>
 
-        <!-- 处理状态 -->
-        <div id="processingStatus" class="recording-status processing-status">
-            <div>⏳ 正在分析您的发音...</div>
-            <small>请稍等，正在将语音转换为文字</small>
+        <!-- 实时识别结果显示 -->
+        <div class="realtime-recognition">
+            <h4>🎯 实时识别结果</h4>
+            <div id="recognitionText" class="recognition-text">
+                <em style="color: var(--text-light);">开始朗读后，识别文字将实时显示在这里...</em>
+            </div>
         </div>
 
-        <!-- 录音播放 -->
-        <div id="audioPlayback" class="audio-playback">
-            <h4>🎵 您的录音</h4>
-            <audio id="audioPlayer" controls></audio>
+        <!-- 分析结果 -->
+        <div id="analysisResult" class="analysis-result" style="display: none;">
+            <h4>📊 发音分析</h4>
+            <div id="accuracyScore" class="accuracy-score"></div>
+            <div id="detailedAnalysis"></div>
         </div>
 
-        <!-- 语音识别结果 -->
-        <div id="recognitionResult" class="recognition-result">
-            <h4>📝 识别结果</h4>
-            <p id="recognizedText"></p>
-            <div id="keywordAnalysis" style="margin-top: 10px;"></div>
-        </div>
-
-        <button class="btn btn-primary" id="recordBtn">🎤 开始录音朗读</button>
+        <button class="btn btn-primary" id="recordBtn">🎤 开始实时朗读</button>
         <button class="btn btn-secondary" id="manualBtn">✏️ 手动完成打卡</button>
         <button class="btn btn-primary" id="submitBtn" style="display: none;">✅ 完成打卡</button>
 
@@ -328,241 +336,311 @@
     </div>
 
     <script>
-        // 录音相关变量
-        let mediaRecorder;
-        let audioChunks = [];
-        let recordingTimer;
-        let recordingSeconds = 0;
-        let isRecording = false;
-
-        // 目标关键词
+        // 目标文本和关键词
+        const targetSentence = "the future belongs to those who believe in the beauty of their dreams";
         const targetKeywords = ['future', 'believe', 'beauty', 'dreams'];
-        const targetSentence = "The future belongs to those who believe in the beauty of their dreams";
+        const targetWords = targetSentence.split(' ');
 
         // DOM 元素
         const recordBtn = document.getElementById('recordBtn');
         const manualBtn = document.getElementById('manualBtn');
         const submitBtn = document.getElementById('submitBtn');
         const recordingStatus = document.getElementById('recordingStatus');
-        const processingStatus = document.getElementById('processingStatus');
-        const audioPlayback = document.getElementById('audioPlayback');
-        const audioPlayer = document.getElementById('audioPlayer');
-        const recognitionResult = document.getElementById('recognitionResult');
-        const recognizedText = document.getElementById('recognizedText');
-        const keywordAnalysis = document.getElementById('keywordAnalysis');
+        const recognitionText = document.getElementById('recognitionText');
+        const analysisResult = document.getElementById('analysisResult');
+        const accuracyScore = document.getElementById('accuracyScore');
+        const detailedAnalysis = document.getElementById('detailedAnalysis');
         const recordingTimerDisplay = document.getElementById('recordingTimer');
         const resultDiv = document.getElementById('result');
 
-        // 开始录音
-        recordBtn.addEventListener('click', async function() {
-            if (!isRecording) {
-                try {
-                    // 请求麦克风权限
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    
-                    // 创建 MediaRecorder 实例
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-                    
-                    // 收集音频数据
-                    mediaRecorder.ondataavailable = (event) => {
-                        audioChunks.push(event.data);
-                    };
-                    
-                    // 录音完成
-                    mediaRecorder.onstop = async () => {
-                        // 显示处理状态
-                        processingStatus.style.display = 'block';
-                        
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        
-                        // 显示录音播放器
-                        audioPlayer.src = audioUrl;
-                        audioPlayback.style.display = 'block';
-                        
-                        try {
-                            // 进行语音识别
-                            const recognizedTextContent = await speechRecognition(audioBlob);
-                            
-                            // 分析关键词匹配
-                            const analysis = analyzeKeywords(recognizedTextContent, targetKeywords);
-                            
-                            // 显示识别结果
-                            displayRecognitionResult(recognizedTextContent, analysis);
-                            
-                            // 启用提交按钮
-                            submitBtn.style.display = 'block';
-                            
-                        } catch (error) {
-                            console.error('语音识别错误:', error);
-                            recognizedText.innerHTML = '❌ 语音识别失败，请重试或使用手动打卡';
-                            recognitionResult.classList.add('result-show');
-                        }
-                        
-                        // 隐藏处理状态
-                        processingStatus.style.display = 'none';
-                        
-                        // 停止所有音轨
-                        stream.getTracks().forEach(track => track.stop());
-                    };
-                    
-                    // 开始录音
-                    mediaRecorder.start();
-                    isRecording = true;
-                    
-                    // 更新UI
-                    recordBtn.textContent = '⏹️ 停止录音';
-                    recordBtn.classList.add('btn-recording');
-                    recordingStatus.className = 'recording-status recording-active';
-                    
-                    // 重置之前的结果
-                    recognitionResult.classList.remove('result-show');
-                    submitBtn.style.display = 'none';
-                    
-                    // 开始计时器
-                    recordingSeconds = 0;
-                    recordingTimer = setInterval(() => {
-                        recordingSeconds++;
-                        recordingTimerDisplay.textContent = recordingSeconds;
-                    }, 1000);
-                    
-                } catch (error) {
-                    console.error('录音错误:', error);
-                    alert('无法访问麦克风，请确保已授予录音权限。');
+        // 语音识别变量
+        let recognition;
+        let isRecording = false;
+        let recordingSeconds = 0;
+        let recordingTimer;
+        let finalTranscript = '';
+
+        // 检查浏览器支持
+        function initializeSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                recordBtn.disabled = true;
+                recordBtn.innerHTML = '❌ 浏览器不支持语音识别';
+                return null;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+            recognition.maxAlternatives = 3;
+
+            recognition.onstart = () => {
+                console.log('语音识别开始');
+            };
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript + ' ';
+                    } else {
+                        interimTranscript += transcript;
+                    }
                 }
+
+                // 显示实时识别结果
+                displayRealTimeResult(finalTranscript || interimTranscript);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('语音识别错误:', event.error);
+                if (event.error === 'not-allowed') {
+                    alert('请允许浏览器使用麦克风权限');
+                }
+            };
+
+            recognition.onend = () => {
+                console.log('语音识别结束');
+                if (isRecording) {
+                    // 如果还在录音状态但识别结束了，重新开始
+                    recognition.start();
+                } else {
+                    // 分析最终结果
+                    analyzeFinalResult();
+                }
+            };
+
+            return recognition;
+        }
+
+        // 显示实时识别结果
+        function displayRealTimeResult(transcript) {
+            if (!transcript.trim()) return;
+
+            const processedText = analyzeRealTimeText(transcript.toLowerCase());
+            recognitionText.innerHTML = processedText;
+        }
+
+        // 实时文本分析
+        function analyzeRealTimeText(text) {
+            const words = text.split(' ');
+            let resultHTML = '';
+            let correctCount = 0;
+            let totalCompared = 0;
+
+            words.forEach((word, index) => {
+                if (index < targetWords.length) {
+                    const targetWord = targetWords[index];
+                    if (word === targetWord) {
+                        resultHTML += `<span class="word-correct">${word}</span> `;
+                        correctCount++;
+                    } else if (word.length > 0) {
+                        // 计算相似度
+                        const similarity = calculateSimilarity(word, targetWord);
+                        if (similarity > 0.6) {
+                            resultHTML += `<span class="word-correct">${word}</span> `;
+                            correctCount++;
+                        } else {
+                            resultHTML += `<span class="word-incorrect" title="应为: ${targetWord}">${word}</span> `;
+                        }
+                    } else {
+                        resultHTML += `<span class="word-missing">[?]</span> `;
+                    }
+                    totalCompared++;
+                } else {
+                    // 多余的词
+                    resultHTML += `<span class="word-extra">${word}</span> `;
+                }
+            });
+
+            // 添加缺失的词
+            for (let i = words.length; i < targetWords.length; i++) {
+                resultHTML += `<span class="word-missing">${targetWords[i]}</span> `;
+            }
+
+            return resultHTML;
+        }
+
+        // 计算单词相似度
+        function calculateSimilarity(word1, word2) {
+            const longer = word1.length > word2.length ? word1 : word2;
+            const shorter = word1.length > word2.length ? word2 : word1;
+            
+            if (longer.length === 0) return 1.0;
+            
+            return (longer.length - editDistance(longer, shorter)) / parseFloat(longer.length);
+        }
+
+        // 编辑距离算法
+        function editDistance(s1, s2) {
+            s1 = s1.toLowerCase();
+            s2 = s2.toLowerCase();
+
+            const costs = [];
+            for (let i = 0; i <= s1.length; i++) {
+                let lastValue = i;
+                for (let j = 0; j <= s2.length; j++) {
+                    if (i === 0) {
+                        costs[j] = j;
+                    } else if (j > 0) {
+                        let newValue = costs[j - 1];
+                        if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
+                            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                        }
+                        costs[j - 1] = lastValue;
+                        lastValue = newValue;
+                    }
+                }
+                if (i > 0) costs[s2.length] = lastValue;
+            }
+            return costs[s2.length];
+        }
+
+        // 分析最终结果
+        function analyzeFinalResult() {
+            const userWords = finalTranscript.toLowerCase().trim().split(/\s+/);
+            const targetWords = targetSentence.split(' ');
+            
+            let correctCount = 0;
+            let missingWords = [];
+            let wrongWords = [];
+            let extraWords = [];
+
+            // 分析每个目标单词
+            targetWords.forEach((targetWord, index) => {
+                if (index < userWords.length) {
+                    const userWord = userWords[index];
+                    const similarity = calculateSimilarity(userWord, targetWord);
+                    
+                    if (similarity > 0.7) {
+                        correctCount++;
+                    } else {
+                        wrongWords.push({
+                            user: userWord,
+                            target: targetWord,
+                            position: index + 1
+                        });
+                    }
+                } else {
+                    missingWords.push({
+                        word: targetWord,
+                        position: index + 1
+                    });
+                }
+            });
+
+            // 检查多余单词
+            if (userWords.length > targetWords.length) {
+                for (let i = targetWords.length; i < userWords.length; i++) {
+                    extraWords.push(userWords[i]);
+                }
+            }
+
+            const accuracy = (correctCount / targetWords.length) * 100;
+            
+            displayAnalysisResult(accuracy, missingWords, wrongWords, extraWords);
+        }
+
+        // 显示分析结果
+        function displayAnalysisResult(accuracy, missingWords, wrongWords, extraWords) {
+            accuracyScore.innerHTML = `发音准确率: ${accuracy.toFixed(1)}%`;
+            
+            let analysisHTML = '';
+            
+            if (missingWords.length > 0) {
+                analysisHTML += `<div>❌ <strong>缺失单词:</strong> ${missingWords.map(w => `"${w.word}"(第${w.position}个)`).join(', ')}</div>`;
+            }
+            
+            if (wrongWords.length > 0) {
+                analysisHTML += `<div>⚠️ <strong>发音不准:</strong> ${wrongWords.map(w => `"${w.user}"→"${w.target}"`).join(', ')}</div>`;
+            }
+            
+            if (extraWords.length > 0) {
+                analysisHTML += `<div>🔍 <strong>多余单词:</strong> ${extraWords.map(w => `"${w}"`).join(', ')}</div>`;
+            }
+
+            if (accuracy >= 80) {
+                analysisHTML += `<div style="margin-top: 10px; color: var(--success);">🎉 发音很棒！继续努力！</div>`;
+            } else if (accuracy >= 60) {
+                analysisHTML += `<div style="margin-top: 10px; color: var(--warning);">👍 还不错，注意个别单词的发音</div>`;
             } else {
-                // 停止录音
-                mediaRecorder.stop();
+                analysisHTML += `<div style="margin-top: 10px; color: var(--error);">💪 需要多练习，建议重复朗读几次</div>`;
+            }
+
+            detailedAnalysis.innerHTML = analysisHTML;
+            analysisResult.style.display = 'block';
+            submitBtn.style.display = 'block';
+        }
+
+        // 开始/停止录音
+        recordBtn.addEventListener('click', function() {
+            if (!isRecording) {
+                // 初始化语音识别
+                if (!recognition) {
+                    recognition = initializeSpeechRecognition();
+                    if (!recognition) return;
+                }
+
+                // 开始识别
+                recognition.start();
+                isRecording = true;
+                
+                // 更新UI
+                recordBtn.textContent = '⏹️ 停止朗读';
+                recordBtn.classList.add('btn-recording');
+                recordingStatus.style.display = 'block';
+                
+                // 重置状态
+                finalTranscript = '';
+                recognitionText.innerHTML = '<em style="color: var(--text-light);">请开始朗读...</em>';
+                analysisResult.style.display = 'none';
+                submitBtn.style.display = 'none';
+                
+                // 开始计时
+                recordingSeconds = 0;
+                recordingTimer = setInterval(() => {
+                    recordingSeconds++;
+                    recordingTimerDisplay.textContent = recordingSeconds;
+                }, 1000);
+                
+            } else {
+                // 停止识别
+                recognition.stop();
                 isRecording = false;
                 
                 // 更新UI
-                recordBtn.textContent = '🎤 开始录音朗读';
+                recordBtn.textContent = '🎤 开始实时朗读';
                 recordBtn.classList.remove('btn-recording');
-                recordingStatus.className = 'recording-status';
+                recordingStatus.style.display = 'none';
                 
-                // 停止计时器
+                // 停止计时
                 clearInterval(recordingTimer);
             }
         });
 
-        // 语音识别函数（使用浏览器原生API）
-        function speechRecognition(audioBlob) {
-            return new Promise((resolve, reject) => {
-                // 检查浏览器是否支持语音识别
-                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                    // 模拟识别结果（用于演示）
-                    setTimeout(() => {
-                        const mockResults = [
-                            "the future belongs to those who believe in the beauty of their dreams",
-                            "the future belongs to those who believe in beauty of dreams", 
-                            "future belongs those who believe in beauty dreams",
-                            "the future belong to those who believe in the beauty of their dream"
-                        ];
-                        const randomResult = mockResults[Math.floor(Math.random() * mockResults.length)];
-                        resolve(randomResult);
-                    }, 2000);
-                    return;
-                }
-
-                // 创建语音识别实例
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                const recognition = new SpeechRecognition();
-                
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-
-                // 处理识别结果
-                recognition.onresult = (event) => {
-                    const transcript = event.results[0][0].transcript;
-                    resolve(transcript.toLowerCase());
-                };
-
-                recognition.onerror = (event) => {
-                    reject(new Error(`语音识别错误: ${event.error}`));
-                };
-
-                // 开始识别（这里需要将Blob转换为可识别的格式）
-                // 注意：实际部署时需要后端处理或使用支持Blob的API
-                // 这里使用模拟结果作为演示
-                setTimeout(() => {
-                    const mockResults = [
-                        "the future belongs to those who believe in the beauty of their dreams",
-                        "the future belongs to those who believe in beauty of dreams"
-                    ];
-                    resolve(mockResults[Math.floor(Math.random() * mockResults.length)]);
-                }, 1500);
-            });
-        }
-
-        // 分析关键词匹配
-        function analyzeKeywords(recognizedText, keywords) {
-            const foundKeywords = [];
-            const missingKeywords = [];
-            
-            keywords.forEach(keyword => {
-                if (recognizedText.includes(keyword)) {
-                    foundKeywords.push(keyword);
-                } else {
-                    missingKeywords.push(keyword);
-                }
-            });
-            
-            const accuracy = (foundKeywords.length / keywords.length) * 100;
-            
-            return {
-                found: foundKeywords,
-                missing: missingKeywords,
-                accuracy: accuracy.toFixed(1),
-                total: keywords.length,
-                foundCount: foundKeywords.length
-            };
-        }
-
-        // 显示识别结果
-        function displayRecognitionResult(text, analysis) {
-            // 高亮显示识别到的关键词
-            let highlightedText = text;
-            analysis.found.forEach(keyword => {
-                const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
-                highlightedText = highlightedText.replace(regex, `<span class="keyword-match">${keyword}</span>`);
-            });
-            
-            recognizedText.innerHTML = highlightedText;
-            
-            // 显示分析结果
-            keywordAnalysis.innerHTML = `
-                <div style="margin-top: 10px;">
-                    <strong>关键词分析：</strong><br>
-                    ✅ 识别到: ${analysis.found.join(', ') || '无'}<br>
-                    ${analysis.missing.length > 0 ? `❌ 未识别: ${analysis.missing.join(', ')}` : '🎉 所有关键词都已识别！'}<br>
-                    <strong>准确率: ${analysis.accuracy}%</strong> (${analysis.foundCount}/${analysis.total})
-                </div>
-            `;
-            
-            recognitionResult.classList.add('result-show');
-        }
-
-        // 完成打卡（录音模式）
+        // 完成打卡
         submitBtn.addEventListener('click', function() {
             const count = document.getElementById('sentenceCount').value;
             
             resultDiv.innerHTML = `
                 <h3>✅ 智能打卡成功！</h3>
                 <p>记录了 <strong>${count}</strong> 个句子的朗读。</p>
-                <p><strong>录音时长：</strong>${recordingSeconds}秒</p>
-                <p><strong>语音识别：</strong>已启用</p>
-                <p><em>（下一步：添加学习数据统计）</em></p>
+                <p><strong>朗读时长：</strong>${recordingSeconds}秒</p>
+                <p><strong>实时识别：</strong>已启用</p>
+                <p><em>（体验如微信般的实时语音转文字）</em></p>
             `;
             resultDiv.className = 'success';
             resultDiv.style.display = 'block';
             
-            // 重置状态
             submitBtn.style.display = 'none';
         });
 
-        // 手动打卡功能
+        // 手动打卡
         manualBtn.addEventListener('click', function() {
             const count = document.getElementById('sentenceCount').value;
             
@@ -571,16 +649,4 @@
                 <p>记录了 <strong>${count}</strong> 个句子的朗读。</p>
                 <p><em>（手动打卡模式）</em></p>
             `;
-            resultDiv.className = 'success';
-            resultDiv.style.display = 'block';
-        });
-
-        // 输入框回车键支持
-        document.getElementById('sentenceCount').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                manualBtn.click();
-            }
-        });
-    </script>
-</body>
-</html>
+            result
