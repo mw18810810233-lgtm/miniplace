@@ -32,7 +32,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: var(--surface);
             border-radius: 20px;
@@ -46,11 +46,6 @@
             color: white;
             padding: 30px;
             text-align: center;
-        }
-
-        .header h1 {
-            margin-bottom: 10px;
-            font-size: 1.8em;
         }
 
         /* 视频库样式 */
@@ -75,28 +70,6 @@
             text-align: center;
             margin-bottom: 30px;
             transition: all 0.3s ease;
-        }
-
-        .upload-section:hover {
-            border-color: var(--primary);
-            background: #F0FFF4;
-        }
-
-        .upload-area {
-            cursor: pointer;
-        }
-
-        .upload-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-
-        .upload-text {
-            margin-bottom: 20px;
-        }
-
-        .file-input {
-            display: none;
         }
 
         .video-grid {
@@ -154,86 +127,103 @@
             padding: 20px;
         }
 
-        .video-info h3 {
-            margin-bottom: 10px;
-            font-size: 1.2em;
+        /* 视频播放器样式 - 集成在库中 */
+        .video-player-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
 
-        .video-info p {
-            color: var(--text-light);
-            margin-bottom: 15px;
-            font-size: 0.9em;
-            line-height: 1.4;
+        .video-player-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow: hidden;
         }
 
-        .video-meta {
-            color: var(--text-light);
-            font-size: 0.8em;
+        .video-player-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        /* 视频播放器样式 */
-        .video-player-container {
             padding: 20px;
+            background: var(--primary);
+            color: white;
         }
 
-        .video-player-wrapper {
+        .video-player-body {
+            display: flex;
+            height: 600px;
+        }
+
+        .video-player-main {
+            flex: 1;
+            background: #000;
             position: relative;
-            width: 100%;
-            margin-bottom: 20px;
+        }
+
+        .video-player-sidebar {
+            width: 350px;
+            background: #F8FAFC;
+            border-left: 1px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
         }
 
         .video-player {
             width: 100%;
-            border-radius: 10px;
-            background: #000;
-            display: block;
+            height: 100%;
         }
 
-        .video-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+        .practice-section {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
         }
 
-        .control-btn {
-            padding: 10px 20px;
-            border: none;
+        .subtitle-section {
+            padding: 20px;
+            border-top: 1px solid #E2E8F0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .subtitle-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
             border-radius: 8px;
-            background: var(--primary);
-            color: white;
+            border: 1px solid #E2E8F0;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
             transition: all 0.3s ease;
         }
 
-        .control-btn:hover {
-            background: #0DA271;
-            transform: translateY(-2px);
+        .subtitle-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
         }
 
-        .control-btn.secondary {
-            background: var(--surface);
-            color: var(--text);
-            border: 2px solid #E2E8F0;
+        .subtitle-item.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
         }
 
         /* 练习区域样式 */
-        .practice-area {
-            padding: 30px;
-        }
-
         .sentence-card {
             background: var(--surface);
             border: 2px solid #E2E8F0;
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
             transition: all 0.3s ease;
         }
 
@@ -242,42 +232,37 @@
             background: linear-gradient(135deg, var(--primary-light) 0%, #E6F3FF 100%);
         }
 
-        .sentence-card.completed {
-            border-color: var(--success);
-            background: #F0FFF4;
-        }
-
         .sentence-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .sentence-number {
             background: var(--primary);
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            font-size: 0.9em;
         }
 
         .sentence-text {
-            font-size: 1.3em;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.5;
+            margin-bottom: 15px;
             text-align: center;
-            font-weight: 500;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -292,19 +277,10 @@
             color: white;
         }
 
-        .btn-primary:hover {
-            background: #0DA271;
-            transform: translateY(-2px);
-        }
-
         .btn-secondary {
             background: var(--surface);
             color: var(--text);
             border: 2px solid #E2E8F0;
-        }
-
-        .btn-secondary:hover {
-            background: #F7FAFC;
         }
 
         .btn-danger {
@@ -312,72 +288,50 @@
             color: white;
         }
 
-        /* 录音和评分相关样式 */
-        .recording-visual {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .waveform {
-            display: flex;
-            align-items: end;
+        /* AI分析状态 */
+        .analyzing-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
             justify-content: center;
-            gap: 3px;
-            height: 60px;
-            margin: 20px 0;
+            align-items: center;
+            color: white;
+            flex-direction: column;
         }
 
-        .wave-bar {
-            width: 4px;
-            background: var(--primary);
-            border-radius: 2px;
-            transition: height 0.1s ease;
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
         }
 
-        .recording-timer {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 10px 0;
-        }
-
-        .score-result {
-            text-align: center;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 15px;
-            background: #E0F2FE;
-            border: 1px solid #0EA5E9;
-        }
-
-        .score-number {
-            font-size: 3em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            padding: 20px;
-            border-top: 1px solid #E2E8F0;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* 响应式设计 */
         @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 15px;
+            .video-player-body {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .video-player-sidebar {
+                width: 100%;
+                height: 300px;
             }
             
             .video-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .library-header {
-                flex-direction: column;
-                align-items: stretch;
             }
         }
     </style>
@@ -387,13 +341,50 @@
         <!-- 内容将通过JavaScript动态渲染 -->
     </div>
 
+    <!-- 视频播放器模态框 -->
+    <div class="video-player-modal" id="videoPlayerModal">
+        <div class="video-player-content">
+            <div class="video-player-header">
+                <h3 id="modalVideoTitle">视频播放</h3>
+                <button class="btn btn-secondary" onclick="closeVideoPlayer()" style="background: rgba(255,255,255,0.2); color: white;">
+                    ✕ 关闭
+                </button>
+            </div>
+            <div class="video-player-body">
+                <div class="video-player-main">
+                    <video class="video-player" id="mainVideoPlayer" controls playsinline>
+                        您的浏览器不支持视频播放。
+                    </video>
+                    <div class="analyzing-overlay" id="analyzingOverlay">
+                        <div class="loading-spinner"></div>
+                        <div>AI正在分析视频字幕...</div>
+                        <div style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;" id="analysisProgress">0%</div>
+                    </div>
+                </div>
+                <div class="video-player-sidebar">
+                    <div class="practice-section" id="practiceSection">
+                        <h4>🎤 跟读练习</h4>
+                        <div id="sentencesContainer">
+                            <!-- 句子将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                    <div class="subtitle-section">
+                        <h4>📝 识别字幕</h4>
+                        <div id="subtitlesContainer">
+                            <!-- 字幕将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 应用状态
-        let currentView = 'video-library'; // 'video-library' | 'video-player' | 'practice'
-        let currentVideoId = null;
-        let currentSentenceIndex = 0;
+        let currentView = 'video-library';
         let userVideos = [];
         let currentVideoElement = null;
+        let currentSubtitles = [];
 
         // 示例预设视频数据
         const presetVideos = [
@@ -407,19 +398,20 @@
                 learners: '2.3k',
                 type: 'preset',
                 thumbnail: '🐷',
-                videoUrl: 'https://example.com/peppa.mp4', // 示例URL，实际需要真实视频URL
                 sentences: [
                     {
                         text: "Hello, my name is Peppa Pig.",
                         translation: "你好，我叫小猪佩奇。",
                         difficulty: "easy",
-                        tips: ["注意 'Hello' 的发音", "'Peppa' 的重音在第一个音节"]
+                        startTime: 0,
+                        endTime: 3
                     },
                     {
                         text: "This is my little brother, George.",
                         translation: "这是我的弟弟乔治。",
                         difficulty: "medium",
-                        tips: ["'little' 的 /l/ 发音要清晰", "注意句子中的连读"]
+                        startTime: 3,
+                        endTime: 6
                     }
                 ]
             }
@@ -429,18 +421,8 @@
         function renderApp() {
             const container = document.getElementById('appContainer');
             
-            switch (currentView) {
-                case 'video-library':
-                    container.innerHTML = renderVideoLibrary();
-                    break;
-                case 'video-player':
-                    container.innerHTML = renderVideoPlayer();
-                    setTimeout(initializeVideoPlayer, 0);
-                    break;
-                case 'practice':
-                    container.innerHTML = renderPractice();
-                    setTimeout(initializePractice, 0);
-                    break;
+            if (currentView === 'video-library') {
+                container.innerHTML = renderVideoLibrary();
             }
         }
 
@@ -464,23 +446,16 @@
 
                     <div class="upload-section" id="uploadSection" style="display: none;">
                         <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                            <div class="upload-icon">📤</div>
-                            <h3 class="upload-text">点击选择视频文件或拖拽到此区域</h3>
+                            <div style="font-size: 3em; margin-bottom: 15px;">📤</div>
+                            <h3 style="margin-bottom: 20px;">点击选择视频文件或拖拽到此区域</h3>
                             <p style="color: var(--text-light); margin-bottom: 20px;">
-                                支持 MP4, WebM, MOV 格式，最大 100MB
+                                支持 MP4, WebM, MOV 格式
                             </p>
                             <button class="btn btn-secondary">
                                 📎 选择视频文件
                             </button>
                         </div>
                         <input type="file" id="fileInput" class="file-input" accept="video/*" onchange="handleFileUpload(this.files)">
-                        
-                        <div id="uploadProgress" style="margin-top: 20px; display: none;">
-                            <div style="background: #E2E8F0; border-radius: 10px; height: 6px;">
-                                <div id="progressBar" style="background: var(--primary); height: 100%; width: 0%; border-radius: 10px; transition: width 0.3s ease;"></div>
-                            </div>
-                            <div id="progressText" style="text-align: center; margin-top: 10px; color: var(--text-light);"></div>
-                        </div>
                     </div>
 
                     ${userVideos.length > 0 ? `
@@ -507,7 +482,7 @@
                 `<div>${video.thumbnail}</div>`;
             
             return `
-                <div class="video-card" onclick="playVideo('${video.id}')">
+                <div class="video-card" onclick="openVideoPlayer('${video.id}')">
                     <div class="video-thumbnail">
                         ${thumbnailContent}
                         <div class="video-duration">${video.duration}</div>
@@ -515,14 +490,14 @@
                     <div class="video-info">
                         <h3>${video.title}</h3>
                         <p>${video.description}</p>
-                        <div class="video-meta">
+                        <div style="color: var(--text-light); font-size: 0.8em; display: flex; justify-content: space-between; align-items: center;">
                             <span>⭐ ${video.rating}</span>
                             <span>📊 ${video.level}</span>
                             <span>👥 ${video.learners}</span>
                         </div>
                         ${video.type === 'user' ? `
                             <div style="margin-top: 10px;">
-                                <button class="btn btn-danger" onclick="event.stopPropagation(); deleteVideo('${video.id}')" style="padding: 8px 16px; font-size: 12px;">
+                                <button class="btn btn-danger" onclick="event.stopPropagation(); deleteVideo('${video.id}')" style="padding: 6px 12px; font-size: 12px;">
                                     🗑️ 删除
                                 </button>
                             </div>
@@ -532,125 +507,239 @@
             `;
         }
 
-        // 渲染视频播放器
-        function renderVideoPlayer() {
-            const video = getCurrentVideo();
-            if (!video) return renderVideoLibrary();
+        // 打开视频播放器（模态框方式）
+        function openVideoPlayer(videoId) {
+            const video = getVideoById(videoId);
+            if (!video) return;
 
+            const modal = document.getElementById('videoPlayerModal');
+            const videoTitle = document.getElementById('modalVideoTitle');
+            const videoPlayer = document.getElementById('mainVideoPlayer');
+
+            videoTitle.textContent = video.title;
+            
+            // 设置视频源
             const videoSource = video.objectUrl || video.videoUrl;
+            videoPlayer.innerHTML = `<source src="${videoSource}" type="video/mp4">`;
+            videoPlayer.load();
 
-            return `
-                <div class="header">
-                    <h1>🎬 ${video.title}</h1>
-                    <p>观看视频并开始跟读练习</p>
-                </div>
+            // 显示模态框
+            modal.style.display = 'flex';
+            
+            // 初始化播放器
+            currentVideoElement = videoPlayer;
+            initializeVideoPlayer(video);
+        }
 
-                <div class="video-player-container">
-                    <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
-                        <button class="btn btn-secondary" onclick="goBack()">
-                            ← 返回视频库
-                        </button>
-                        <button class="btn btn-primary" onclick="startPractice()">
-                            🎤 开始跟读练习
-                        </button>
-                    </div>
-
-                    <div class="video-player-wrapper">
-                        <video class="video-player" id="mainVideoPlayer" controls playsinline>
-                            <source src="${videoSource}" type="video/mp4">
-                            您的浏览器不支持视频播放。
-                        </video>
-                    </div>
-
-                    <div class="video-controls">
-                        <button class="control-btn" onclick="playPauseVideo()">
-                            ⏯️ 播放/暂停
-                        </button>
-                        <button class="control-btn secondary" onclick="toggleMute()">
-                            🔇 静音/取消
-                        </button>
-                        <button class="control-btn secondary" onclick="skipBackward()">
-                            ⏪ 后退10秒
-                        </button>
-                        <button class="control-btn secondary" onclick="skipForward()">
-                            ⏩ 前进10秒
-                        </button>
-                        <button class="control-btn secondary" onclick="toggleFullscreen()">
-                            📺 全屏
-                        </button>
-                    </div>
-
-                    <div style="background: #F8FAFC; padding: 20px; border-radius: 10px;">
-                        <h4>📋 视频信息</h4>
-                        <p style="margin-top: 10px; color: var(--text-light);">
-                            <strong>标题:</strong> ${video.title}<br>
-                            <strong>描述:</strong> ${video.description}<br>
-                            <strong>难度:</strong> ${video.level} | <strong>时长:</strong> ${video.duration}<br>
-                            <strong>跟读句子:</strong> ${video.sentences ? video.sentences.length : 0} 句
-                        </p>
-                    </div>
-                </div>
-            `;
+        // 关闭视频播放器
+        function closeVideoPlayer() {
+            const modal = document.getElementById('videoPlayerModal');
+            modal.style.display = 'none';
+            
+            if (currentVideoElement) {
+                currentVideoElement.pause();
+            }
         }
 
         // 初始化视频播放器
-        function initializeVideoPlayer() {
-            currentVideoElement = document.getElementById('mainVideoPlayer');
-            if (currentVideoElement) {
-                // 添加事件监听器
-                currentVideoElement.addEventListener('loadedmetadata', function() {
-                    console.log('视频时长:', this.duration);
-                });
-                
-                currentVideoElement.addEventListener('timeupdate', function() {
-                    updateVideoProgress();
-                });
+        function initializeVideoPlayer(video) {
+            const videoPlayer = document.getElementById('mainVideoPlayer');
+            
+            // 如果有预设句子，直接使用
+            if (video.sentences && video.sentences.length > 0) {
+                renderSentences(video.sentences);
+                renderSubtitles(video.sentences);
+            } else {
+                // 否则启动AI字幕分析
+                startAISubtitleAnalysis(video);
             }
+
+            // 添加时间更新监听器，用于高亮当前句子
+            videoPlayer.addEventListener('timeupdate', function() {
+                updateCurrentSentence(this.currentTime);
+            });
         }
 
-        // 视频控制函数
-        function playPauseVideo() {
-            if (currentVideoElement) {
-                if (currentVideoElement.paused) {
-                    currentVideoElement.play();
-                } else {
-                    currentVideoElement.pause();
+        // AI字幕分析
+        function startAISubtitleAnalysis(video) {
+            const overlay = document.getElementById('analyzingOverlay');
+            const progressText = document.getElementById('analysisProgress');
+            
+            // 显示分析界面
+            overlay.style.display = 'flex';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    // 模拟AI分析完成
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        const generatedSentences = generateAISubtitles(video);
+                        video.sentences = generatedSentences;
+                        renderSentences(generatedSentences);
+                        renderSubtitles(generatedSentences);
+                    }, 500);
                 }
-            }
+                progressText.textContent = Math.round(progress) + '%';
+            }, 200);
         }
 
-        function toggleMute() {
-            if (currentVideoElement) {
-                currentVideoElement.muted = !currentVideoElement.muted;
-            }
-        }
-
-        function skipBackward() {
-            if (currentVideoElement) {
-                currentVideoElement.currentTime = Math.max(0, currentVideoElement.currentTime - 10);
-            }
-        }
-
-        function skipForward() {
-            if (currentVideoElement) {
-                currentVideoElement.currentTime = Math.min(currentVideoElement.duration, currentVideoElement.currentTime + 10);
-            }
-        }
-
-        function toggleFullscreen() {
-            if (currentVideoElement) {
-                if (!document.fullscreenElement) {
-                    currentVideoElement.requestFullscreen().catch(err => {
-                        console.log(`全屏请求失败: ${err.message}`);
-                    });
-                } else {
-                    document.exitFullscreen();
+        // 模拟AI生成字幕（实际应用中会调用真实的语音识别API）
+        function generateAISubtitles(video) {
+            // 这里模拟AI分析出的句子
+            return [
+                {
+                    text: "Hello everyone, welcome to our English class.",
+                    translation: "大家好，欢迎来到我们的英语课堂。",
+                    difficulty: "easy",
+                    startTime: 0,
+                    endTime: 4
+                },
+                {
+                    text: "Today we are going to learn about daily conversations.",
+                    translation: "今天我们将学习日常对话。",
+                    difficulty: "medium",
+                    startTime: 4,
+                    endTime: 8
+                },
+                {
+                    text: "Let's practice some useful phrases together.",
+                    translation: "让我们一起练习一些有用的短语。",
+                    difficulty: "medium",
+                    startTime: 8,
+                    endTime: 12
+                },
+                {
+                    text: "Repeat after me and pay attention to your pronunciation.",
+                    translation: "跟我重复，注意你的发音。",
+                    difficulty: "medium",
+                    startTime: 12,
+                    endTime: 16
+                },
+                {
+                    text: "Great job! Keep practicing and you will improve quickly.",
+                    translation: "做得很好！继续练习，你会很快进步的。",
+                    difficulty: "hard",
+                    startTime: 16,
+                    endTime: 20
                 }
+            ];
+        }
+
+        // 渲染句子
+        function renderSentences(sentences) {
+            const container = document.getElementById('sentencesContainer');
+            let html = sentences.map((sentence, index) => `
+                <div class="sentence-card" id="sentence-${index}" onclick="playSentence(${index})">
+                    <div class="sentence-header">
+                        <div class="sentence-number">${index + 1}</div>
+                        <div style="color: var(--text-light); font-size: 0.8em;">
+                            ${sentence.difficulty === 'easy' ? '⭐ 简单' : sentence.difficulty === 'medium' ? '⭐⭐ 中等' : '⭐⭐⭐ 困难'}
+                        </div>
+                    </div>
+                    <div class="sentence-text">
+                        ${sentence.text}
+                        <div style="font-size: 0.8em; color: var(--text-light); margin-top: 8px;">
+                            ${sentence.translation}
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                        <button class="btn btn-secondary" onclick="event.stopPropagation(); playDemonstration(${index})" style="padding: 6px 12px; font-size: 12px;">
+                            🔊 示范
+                        </button>
+                        <button class="btn btn-primary" onclick="event.stopPropagation(); startRecording(${index})" style="padding: 6px 12px; font-size: 12px;">
+                            🎤 跟读
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            container.innerHTML = html;
+        }
+
+        // 渲染字幕
+        function renderSubtitles(sentences) {
+            const container = document.getElementById('subtitlesContainer');
+            let html = sentences.map((sentence, index) => `
+                <div class="subtitle-item" id="subtitle-${index}" onclick="playSentence(${index})">
+                    <div style="font-weight: 500;">${sentence.text}</div>
+                    <div style="font-size: 0.8em; color: var(--text-light); margin-top: 4px;">
+                        ${formatTime(sentence.startTime)} - ${formatTime(sentence.endTime)}
+                    </div>
+                </div>
+            `).join('');
+            container.innerHTML = html;
+        }
+
+        // 播放指定句子对应的时间段
+        function playSentence(index) {
+            if (!currentVideoElement) return;
+            
+            const sentences = getCurrentVideo().sentences;
+            const sentence = sentences[index];
+            
+            // 跳转到句子开始时间
+            currentVideoElement.currentTime = sentence.startTime;
+            currentVideoElement.play();
+            
+            // 高亮当前句子和字幕
+            highlightCurrentItem(index);
+        }
+
+        // 高亮当前项目
+        function highlightCurrentItem(index) {
+            // 移除所有高亮
+            document.querySelectorAll('.sentence-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelectorAll('.subtitle-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 添加当前高亮
+            const sentenceCard = document.getElementById(`sentence-${index}`);
+            const subtitleItem = document.getElementById(`subtitle-${index}`);
+            
+            if (sentenceCard) sentenceCard.classList.add('active');
+            if (subtitleItem) subtitleItem.classList.add('active');
+        }
+
+        // 更新时间轴高亮
+        function updateCurrentSentence(currentTime) {
+            const sentences = getCurrentVideo().sentences;
+            if (!sentences) return;
+            
+            let currentIndex = -1;
+            sentences.forEach((sentence, index) => {
+                if (currentTime >= sentence.startTime && currentTime <= sentence.endTime) {
+                    currentIndex = index;
+                }
+            });
+            
+            if (currentIndex !== -1) {
+                highlightCurrentItem(currentIndex);
             }
         }
 
-        function updateVideoProgress() {
-            // 可以在这里添加进度更新逻辑
+        // 工具函数
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function getVideoById(videoId) {
+            const allVideos = [...presetVideos, ...userVideos];
+            return allVideos.find(video => video.id === videoId);
+        }
+
+        function getCurrentVideo() {
+            const videoTitle = document.getElementById('modalVideoTitle').textContent;
+            const allVideos = [...presetVideos, ...userVideos];
+            return allVideos.find(video => video.title === videoTitle);
         }
 
         // 视频管理功能
@@ -668,72 +757,34 @@
                 return;
             }
 
-            // 显示上传进度
-            const progressSection = document.getElementById('uploadProgress');
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
+            // 创建对象URL用于本地播放
+            const objectUrl = URL.createObjectURL(file);
             
-            progressSection.style.display = 'block';
+            // 创建新视频对象
+            const newVideo = {
+                id: 'user_' + Date.now(),
+                title: file.name.replace(/\.[^/.]+$/, ""),
+                description: '我上传的学习视频',
+                level: '自定义',
+                duration: '--:--',
+                rating: '5.0',
+                learners: '1',
+                type: 'user',
+                thumbnail: '🎥',
+                objectUrl: objectUrl,
+                file: file
+                // sentences 将在AI分析时生成
+            };
             
-            // 模拟上传过程
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 10;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    
-                    // 创建对象URL用于本地播放
-                    const objectUrl = URL.createObjectURL(file);
-                    
-                    // 创建新视频对象
-                    const newVideo = {
-                        id: 'user_' + Date.now(),
-                        title: file.name.replace(/\.[^/.]+$/, ""), // 移除扩展名
-                        description: '我上传的学习视频',
-                        level: '自定义',
-                        duration: '待分析',
-                        rating: '5.0',
-                        learners: '1',
-                        type: 'user',
-                        thumbnail: '🎥',
-                        objectUrl: objectUrl,
-                        file: file,
-                        sentences: [
-                            {
-                                text: "This is a sample sentence from your video.",
-                                translation: "这是来自您视频的示例句子。",
-                                difficulty: "medium",
-                                tips: ["注意发音清晰", "保持自然语调"]
-                            },
-                            {
-                                text: "Learning English is fun and rewarding.",
-                                translation: "学习英语既有趣又有收获。",
-                                difficulty: "easy",
-                                tips: ["注意语调变化", "保持流畅度"]
-                            }
-                        ]
-                    };
-                    
-                    userVideos.push(newVideo);
-                    progressText.innerHTML = '✅ 上传完成！';
-                    
-                    setTimeout(() => {
-                        renderApp();
-                        alert('视频上传成功！现在您可以播放视频并开始跟读练习。');
-                    }, 1000);
-                }
-                
-                progressBar.style.width = progress + '%';
-                progressText.innerHTML = `上传中... ${Math.round(progress)}%`;
-            }, 200);
+            userVideos.push(newVideo);
+            renderApp();
+            alert('视频上传成功！点击视频开始AI字幕分析和跟读练习。');
         }
 
         function deleteVideo(videoId) {
             if (confirm('确定要删除这个视频吗？')) {
                 const videoIndex = userVideos.findIndex(video => video.id === videoId);
                 if (videoIndex !== -1) {
-                    // 释放对象URL
                     if (userVideos[videoIndex].objectUrl) {
                         URL.revokeObjectURL(userVideos[videoIndex].objectUrl);
                     }
@@ -743,325 +794,26 @@
             }
         }
 
-        // 视频播放功能
-        function playVideo(videoId) {
-            currentVideoId = videoId;
-            currentView = 'video-player';
-            renderApp();
-        }
-
-        function getCurrentVideo() {
-            const allVideos = [...presetVideos, ...userVideos];
-            return allVideos.find(video => video.id === currentVideoId);
-        }
-
-        function startPractice() {
-            currentView = 'practice';
-            currentSentenceIndex = 0;
-            renderApp();
-        }
-
-        function goBackToVideo() {
-            currentView = 'video-player';
-            renderApp();
-        }
-
-        // 导航功能
-        function goBack() {
-            if (currentView === 'video-player') {
-                currentView = 'video-library';
-            } else if (currentView === 'practice') {
-                if (confirm('确定要返回吗？当前练习进度将不会保存。')) {
-                    currentView = 'video-player';
-                }
-            }
-            renderApp();
-        }
-
-        // 练习功能实现
-        function renderPractice() {
-            const video = getCurrentVideo();
-            return `
-                <div class="header">
-                    <h1>🎤 英语跟读练习</h1>
-                    <p>${video ? video.title : '跟读练习'}</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                    <div id="progressText">0/0 句完成</div>
-                </div>
-
-                <div class="practice-area">
-                    <div id="sentencesContainer"></div>
-                    <div class="recording-visual" id="recordingVisual" style="display: none;">
-                        <div class="waveform" id="waveform"></div>
-                        <div class="recording-timer" id="recordingTimer">00:00</div>
-                        <div style="text-align: center; padding: 15px; margin: 15px 0; border-radius: 10px; background: #FEF3C7; border: 1px solid var(--warning); color: var(--warning);">
-                            ● 正在录音中... 点击"结束朗读"完成录音
-                        </div>
-                        <button class="btn btn-primary" id="stopRecordingBtn">
-                            ⏹️ 结束朗读
-                        </button>
-                    </div>
-                    <div class="score-result" id="scoreResult" style="display: none;">
-                        <h3>🎯 发音评分</h3>
-                        <div class="score-number" id="scoreNumber">0</div>
-                        <div class="feedback" id="scoreFeedback"></div>
-                        <div style="background: #F8FAFC; border-radius: 10px; padding: 15px; margin: 15px 0; text-align: left;">
-                            <h4>💡 发音建议</h4>
-                            <div id="pronunciationTips"></div>
-                        </div>
-                        <button class="btn btn-primary" onclick="nextSentence()">
-                            ➡️ 下一句
-                        </button>
-                        <button class="btn btn-secondary" onclick="repeatSentence()" style="margin-top: 10px;">
-                            🔄 重复练习此句
-                        </button>
-                    </div>
-                </div>
-
-                <div class="navigation">
-                    <button class="btn btn-secondary" onclick="goBackToVideo()">
-                        ← 返回视频
-                    </button>
-                    <button class="btn btn-primary" id="completeBtn" style="display: none;">
-                        ✅ 完成练习
-                    </button>
-                </div>
-            `;
-        }
-
-        function initializePractice() {
-            renderSentences();
-            updateProgress();
-            createWaveform();
-            document.getElementById('stopRecordingBtn').addEventListener('click', stopRecording);
-        }
-
-        function renderSentences() {
-            const video = getCurrentVideo();
-            if (!video || !video.sentences) return;
-            
-            const container = document.getElementById('sentencesContainer');
-            let html = video.sentences.map((sentence, index) => `
-                <div class="sentence-card ${index === currentSentenceIndex ? 'active' : ''} ${index < currentSentenceIndex ? 'completed' : ''}" 
-                     id="sentence-${index}" ${index === currentSentenceIndex ? '' : 'style="display: none;"'}>
-                    <div class="sentence-header">
-                        <div class="sentence-number">${index + 1}</div>
-                        <div style="color: var(--text-light); font-size: 0.9em;">
-                            ${sentence.difficulty === 'easy' ? '⭐ 简单' : sentence.difficulty === 'medium' ? '⭐⭐ 中等' : '⭐⭐⭐ 困难'}
-                        </div>
-                    </div>
-                    <div class="sentence-text">
-                        ${sentence.text}
-                        <div style="font-size: 0.8em; color: var(--text-light); margin-top: 8px;">
-                            ${sentence.translation}
-                        </div>
-                    </div>
-                    <div class="sentence-actions">
-                        <button class="btn btn-secondary" onclick="playDemonstration(${index})">
-                            🔊 AI朗读示范
-                        </button>
-                        <button class="btn btn-primary" onclick="startRecording(${index})" id="recordBtn-${index}">
-                            🎤 开始朗读
-                        </button>
-                    </div>
-                    <div style="background: #F8FAFC; border-radius: 10px; padding: 15px; margin: 15px 0; text-align: left;">
-                        <h4>📝 发音要点</h4>
-                        ${sentence.tips.map(tip => `
-                            <div style="display: flex; align-items: center; margin: 8px 0; font-size: 0.9em;">
-                                <span style="margin-right: 10px; font-size: 1.2em;">•</span>
-                                <span>${tip}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-            container.innerHTML = html;
-        }
-
-        // 练习功能实现
-        let isRecording = false;
-        let recordingTimer = null;
-        let recordingSeconds = 0;
-        let waveAnimation = null;
-
-        function startRecording(index) {
-            if (isRecording) return;
-            
-            isRecording = true;
-            currentSentenceIndex = index;
-            
-            document.getElementById(`recordBtn-${index}`).style.display = 'none';
-            document.getElementById('recordingVisual').style.display = 'block';
-            
-            // 开始计时
-            recordingSeconds = 0;
-            recordingTimer = setInterval(() => {
-                recordingSeconds++;
-                const minutes = Math.floor(recordingSeconds / 60);
-                const seconds = recordingSeconds % 60;
-                document.getElementById('recordingTimer').textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
-            
-            // 开始声波纹动画
-            startWaveAnimation();
-        }
-
-        function stopRecording() {
-            if (!isRecording) return;
-            
-            isRecording = false;
-            
-            // 停止计时和动画
-            if (recordingTimer) {
-                clearInterval(recordingTimer);
-                recordingTimer = null;
-            }
-            stopWaveAnimation();
-            
-            document.getElementById('recordingVisual').style.display = 'none';
-            
-            // 模拟分析过程
-            setTimeout(() => {
-                showScoreResult();
-            }, 1500);
-        }
-
-        function startWaveAnimation() {
-            const bars = document.querySelectorAll('.wave-bar');
-            waveAnimation = setInterval(() => {
-                bars.forEach(bar => {
-                    const randomHeight = Math.random() * 50 + 10;
-                    bar.style.height = `${randomHeight}px`;
-                    bar.style.background = `hsl(${Math.random() * 60 + 180}, 70%, 60%)`;
-                });
-            }, 100);
-        }
-
-        function stopWaveAnimation() {
-            if (waveAnimation) {
-                clearInterval(waveAnimation);
-                waveAnimation = null;
-            }
-            
-            const bars = document.querySelectorAll('.wave-bar');
-            bars.forEach(bar => {
-                bar.style.height = '10px';
-                bar.style.background = 'var(--primary)';
-            });
-        }
-
-        function showScoreResult() {
-            const video = getCurrentVideo();
-            const currentSentence = video.sentences[currentSentenceIndex];
-            const score = Math.floor(Math.random() * 25) + 70;
-            
-            document.getElementById('scoreNumber').textContent = score;
-            document.getElementById('scoreNumber').className = `score-number ${
-                score >= 90 ? 'score-excellent' : 
-                score >= 80 ? 'score-good' : 'score-poor'
-            }`;
-            
-            document.getElementById('scoreFeedback').innerHTML = score >= 90 ? 
-                '🎉 太棒了！发音非常标准！' : 
-                score >= 80 ? '👍 很好！继续努力！' : '💪 不错！多练习会有更大进步！';
-            
-            const tipsHtml = currentSentence.tips.map(tip => `
-                <div style="display: flex; align-items: center; margin: 8px 0; font-size: 0.9em;">
-                    <span style="margin-right: 10px; font-size: 1.2em;">•</span>
-                    <span>${tip}</span>
-                </div>
-            `).join('');
-            
-            document.getElementById('pronunciationTips').innerHTML = tipsHtml;
-            document.getElementById('scoreResult').style.display = 'block';
-            updateProgress();
-        }
-
-        function nextSentence() {
-            document.getElementById('scoreResult').style.display = 'none';
-            
-            const currentCard = document.getElementById(`sentence-${currentSentenceIndex}`);
-            currentCard.classList.remove('active');
-            currentCard.classList.add('completed');
-            currentCard.style.display = 'none';
-            
-            currentSentenceIndex++;
-            
-            const video = getCurrentVideo();
-            if (currentSentenceIndex < video.sentences.length) {
-                const nextCard = document.getElementById(`sentence-${currentSentenceIndex}`);
-                nextCard.classList.add('active');
-                nextCard.style.display = 'block';
-                document.getElementById(`recordBtn-${currentSentenceIndex}`).style.display = 'flex';
-            } else {
-                showCompletion();
-            }
-            
-            updateProgress();
-        }
-
-        function repeatSentence() {
-            document.getElementById('scoreResult').style.display = 'none';
-            document.getElementById(`recordBtn-${currentSentenceIndex}`).style.display = 'flex';
-        }
-
+        // 练习功能（简化版）
         function playDemonstration(index) {
             const video = getCurrentVideo();
             alert(`AI朗读示范: "${video.sentences[index].text}"`);
         }
 
-        function createWaveform() {
-            const waveform = document.getElementById('waveform');
-            waveform.innerHTML = Array.from({length: 50}, () => 
-                '<div class="wave-bar" style="height: 10px;"></div>'
-            ).join('');
-        }
-
-        function updateProgress() {
-            const video = getCurrentVideo();
-            const progress = (currentSentenceIndex / video.sentences.length) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-            document.getElementById('progressText').textContent = 
-                `${currentSentenceIndex}/${video.sentences.length} 句完成`;
-        }
-
-        function showCompletion() {
-            const container = document.getElementById('sentencesContainer');
-            const totalScore = Math.floor(Math.random() * 20) + 80;
-            const video = getCurrentVideo();
-            
-            container.innerHTML = `
-                <div style="text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
-                    <h2>练习完成！</h2>
-                    <div style="font-size: 3em; font-weight: bold; color: var(--primary); margin: 20px 0;">
-                        ${totalScore}分
-                    </div>
-                    <p style="color: var(--text-light); margin-bottom: 30px;">
-                        您完成了 ${video.sentences.length} 句跟读练习
-                    </p>
-                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                        <button class="btn btn-primary" onclick="restartPractice()">
-                            🔄 重新练习
-                        </button>
-                        <button class="btn btn-secondary" onclick="goBackToVideo()">
-                            📚 返回视频
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function restartPractice() {
-            currentSentenceIndex = 0;
-            initializePractice();
+        function startRecording(index) {
+            alert(`开始录制第 ${index + 1} 句: "${getCurrentVideo().sentences[index].text}"`);
+            // 实际实现需要调用Web Audio API进行录音
         }
 
         // 初始化应用
         document.addEventListener('DOMContentLoaded', renderApp);
+
+        // 点击模态框外部关闭
+        document.getElementById('videoPlayerModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideoPlayer();
+            }
+        });
     </script>
 </body>
 </html>
