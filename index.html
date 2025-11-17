@@ -33,7 +33,6 @@
             padding-bottom: var(--safe-area-inset-bottom);
         }
 
-        /* 移动端优化容器 */
         .mobile-container {
             max-width: 100%;
             min-height: 100vh;
@@ -41,7 +40,6 @@
             background: var(--background);
         }
 
-        /* 卡片设计 - 移动端优化 */
         .card {
             background: var(--surface);
             border-radius: 16px;
@@ -51,7 +49,6 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
-        /* 移动端标题 */
         .mobile-header {
             text-align: center;
             padding: 20px 0;
@@ -67,12 +64,6 @@
             font-weight: 600;
         }
 
-        .mobile-header .subtitle {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-
-        /* 移动端按钮 */
         .btn {
             display: block;
             width: 100%;
@@ -86,7 +77,6 @@
             text-align: center;
             margin: 8px 0;
             -webkit-appearance: none;
-            touch-action: manipulation;
         }
 
         .btn:active {
@@ -98,176 +88,119 @@
             color: white;
         }
 
-        .btn-primary:active {
-            background-color: #0DA271;
-        }
-
         .btn-secondary {
             background-color: var(--surface);
             color: var(--text);
             border: 2px solid #E2E8F0;
         }
 
-        .btn-large {
-            padding: 18px 24px;
-            font-size: 17px;
+        .btn-small {
+            padding: 10px 15px;
+            font-size: 14px;
+            width: auto;
         }
 
-        /* 用户网格 - 移动端优化 */
-        .user-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 20px 0;
-        }
-
-        .user-card {
-            background: white;
-            border: 3px solid #E2E8F0;
+        /* 上传区域样式 */
+        .upload-area {
+            border: 2px dashed #E2E8F0;
             border-radius: 16px;
-            padding: 20px 15px;
+            padding: 40px 20px;
             text-align: center;
-            cursor: pointer;
+            margin: 20px 0;
+            background: #F8FAFC;
             transition: all 0.3s ease;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
-        .user-card:active {
-            transform: scale(0.95);
-        }
-
-        .user-card.active {
+        .upload-area.drag-over {
             border-color: var(--primary);
-            background: linear-gradient(135deg, var(--primary-light) 0%, #E6F3FF 100%);
+            background: #F0FFF4;
         }
 
-        .user-avatar {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: var(--primary);
         }
 
-        .user-name {
-            font-weight: 600;
-            font-size: 0.95em;
+        .file-input {
+            display: none;
         }
 
-        .user-progress {
-            font-size: 0.75em;
+        .upload-instructions {
+            font-size: 0.9em;
             color: var(--text-light);
-            margin-top: 5px;
+            margin: 10px 0;
         }
 
-        /* 进度统计 - 移动端优化 */
-        .progress-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 15px 0;
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .progress-card {
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            font-size: 16px;
             background: white;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* 台词编辑 */
+        .dialogue-editor {
             border: 1px solid #E2E8F0;
             border-radius: 12px;
             padding: 15px;
-            text-align: center;
+            margin-bottom: 15px;
+            background: #F8FAFC;
         }
 
-        .progress-number {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .progress-label {
-            font-size: 0.8em;
-            color: var(--text-light);
-        }
-
-        /* 动画卡片 - 移动端优化 */
-        .animation-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin: 15px 0;
-        }
-
-        .animation-card {
-            background: white;
-            border: 1px solid #E2E8F0;
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .animation-card:active {
-            transform: scale(0.98);
-        }
-
-        .animation-thumbnail {
-            width: 100%;
-            height: 120px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .dialogue-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .remove-dialogue {
+            background: var(--error);
             color: white;
-            font-size: 0.9em;
-            position: relative;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
         }
 
-        .animation-thumbnail::after {
-            content: '▶';
-            position: absolute;
-            right: 15px;
-            bottom: 10px;
-            background: rgba(0,0,0,0.3);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8em;
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
-        .animation-info {
-            padding: 15px;
+        /* 内容区域 */
+        .content-section {
+            display: none;
+            padding-bottom: 80px;
         }
 
-        .animation-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 1em;
+        .content-section.active {
+            display: block;
         }
 
-        .animation-meta {
-            font-size: 0.75em;
-            color: var(--text-light);
-            margin-bottom: 8px;
-        }
-
-        .user-progress-bar {
-            height: 6px;
-            background: #E2E8F0;
-            border-radius: 3px;
-            margin: 8px 0;
-            overflow: hidden;
-        }
-
-        .user-progress-fill {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-
-        /* 底部导航 - 移动端专属 */
+        /* 底部导航 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -292,13 +225,8 @@
             font-size: 0.75em;
             color: var(--text-light);
             cursor: pointer;
-            transition: all 0.2s ease;
             border-radius: 10px;
             min-width: 60px;
-        }
-
-        .nav-item:active {
-            background: #F7FAFC;
         }
 
         .nav-item.active {
@@ -310,230 +238,167 @@
             margin-bottom: 4px;
         }
 
-        /* 内容区域 */
-        .content-section {
-            display: none;
-            padding-bottom: 70px; /* 为底部导航留出空间 */
+        /* 动画卡片 */
+        .animation-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 15px 0;
         }
 
-        .content-section.active {
-            display: block;
+        .animation-card {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            overflow: hidden;
         }
 
-        /* 录音界面优化 */
-        .recording-interface {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .recording-visual {
-            width: 120px;
+        .animation-thumbnail {
+            width: 100%;
             height: 120px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            margin: 20px auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2em;
+            color: white;
             position: relative;
         }
 
-        .recording-visual.recording {
-            animation: pulse 1.5s infinite;
+        .animation-info {
+            padding: 15px;
         }
 
-        .recording-timer {
-            font-size: 2em;
-            font-weight: bold;
-            margin: 15px 0;
-            color: var(--primary);
+        .animation-title {
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        .subtitle-display {
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            font-size: 1.1em;
-            line-height: 1.5;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+        .animation-meta {
+            font-size: 0.8em;
+            color: var(--text-light);
+            margin-bottom: 10px;
         }
 
-        /* 响应式媒体查询 */
+        /* 响应式 */
         @media (min-width: 768px) {
-            /* 平板电脑优化 */
-            .mobile-container {
-                max-width: 768px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-
-            .user-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 15px;
-            }
-
             .animation-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-
-            .progress-grid {
-                grid-template-columns: repeat(4, 1fr);
+            
+            .time-inputs {
+                grid-template-columns: 1fr 1fr;
             }
-        }
-
-        @media (min-width: 1024px) {
-            /* 桌面端优化 */
-            .mobile-container {
-                max-width: 1000px;
-                padding: 30px;
-            }
-
-            .animation-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .bottom-nav {
-                display: none; /* 桌面端隐藏底部导航 */
-            }
-
-            .content-section {
-                padding-bottom: 0;
-            }
-        }
-
-        /* 横屏优化 */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .mobile-header {
-                padding: 10px 0;
-                margin-bottom: 10px;
-            }
-
-            .user-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .user-card {
-                min-height: 80px;
-                padding: 10px;
-            }
-
-            .user-avatar {
-                font-size: 1.8em;
-                margin-bottom: 5px;
-            }
-        }
-
-        /* 动画 */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* 加载状态 */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="mobile-container">
-        <!-- 移动端头部 -->
+        <!-- 头部 -->
         <div class="mobile-header">
             <h1>🎬 英语跟读学习</h1>
-            <div class="subtitle">多端同步 · 移动优先</div>
+            <div class="subtitle">上传动画 · 跟读练习</div>
         </div>
 
-        <!-- 用户选择界面 -->
+        <!-- 用户选择 -->
         <div id="user-section" class="content-section active">
             <div class="card">
-                <h2 style="text-align: center; margin-bottom: 20px;">👨‍👩‍👧‍👦 选择用户</h2>
-                
-                <div class="user-grid" id="usersGrid">
-                    <!-- 用户卡片动态生成 -->
+                <h2 style="text-align: center;">选择用户</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0;">
+                    <div class="user-card" onclick="selectUser('小明')">
+                        <div style="font-size: 2em;">👦</div>
+                        <div>小明</div>
+                    </div>
+                    <div class="user-card" onclick="selectUser('小红')">
+                        <div style="font-size: 2em;">👧</div>
+                        <div>小红</div>
+                    </div>
                 </div>
-
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="showAddUserForm()">
-                        ＋ 添加新用户
-                    </button>
-                </div>
-            </div>
-
-            <!-- 添加用户表单 -->
-            <div class="card" id="addUserForm" style="display: none;">
-                <h3>添加新用户</h3>
-                <input type="text" id="newUserName" placeholder="输入姓名" 
-                       style="width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; margin: 10px 0;">
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0;">
-                    <button class="btn btn-secondary" onclick="selectAvatar('👦')">👦 男孩</button>
-                    <button class="btn btn-secondary" onclick="selectAvatar('👧')">👧 女孩</button>
-                    <button class="btn btn-secondary" onclick="selectAvatar('🐻')">🐻 小熊</button>
-                    <button class="btn btn-secondary" onclick="selectAvatar('🐰')">🐰 小兔</button>
-                    <button class="btn btn-secondary" onclick="selectAvatar('🐯')">🐯 小虎</button>
-                    <button class="btn btn-secondary" onclick="selectAvatar('🐵')">🐵 小猴</button>
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-secondary" onclick="hideAddUserForm()" style="flex: 1;">取消</button>
-                    <button class="btn btn-primary" onclick="createNewUser()" style="flex: 1;">创建</button>
-                </div>
+                <button class="btn btn-primary" onclick="showSection('main-section')">
+                    进入学习
+                </button>
             </div>
         </div>
 
-        <!-- 主学习界面 -->
+        <!-- 主界面 -->
         <div id="main-section" class="content-section">
             <div class="card">
-                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px;">
-                    <h2 id="currentUserWelcome">欢迎！</h2>
-                    <button class="btn btn-secondary" onclick="switchUser()" style="width: auto; padding: 8px 12px;">
-                        切换用户
-                    </button>
-                </div>
-
-                <!-- 进度概览 -->
-                <div class="progress-grid">
-                    <div class="progress-card">
-                        <div class="progress-number" id="completedAnimations">0</div>
-                        <div class="progress-label">完成动画</div>
+                <h2>🎓 学习中心</h2>
+                <p style="color: var(--text-light); margin: 10px 0;">欢迎，<span id="currentUser">用户</span>！</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+                    <div class="stat-card">
+                        <div style="font-size: 1.5em; font-weight: bold; color: var(--primary);">3</div>
+                        <div style="font-size: 0.8em;">完成动画</div>
                     </div>
-                    <div class="progress-card">
-                        <div class="progress-number" id="totalSentences">0</div>
-                        <div class="progress-label">跟读句子</div>
-                    </div>
-                    <div class="progress-card">
-                        <div class="progress-number" id="averageAccuracy">0%</div>
-                        <div class="progress-label">准确率</div>
-                    </div>
-                    <div class="progress-card">
-                        <div class="progress-number" id="learningTime">0m</div>
-                        <div class="progress-label">学习时间</div>
+                    <div class="stat-card">
+                        <div style="font-size: 1.5em; font-weight: bold; color: var(--primary);">85%</div>
+                        <div style="font-size: 0.8em;">平均准确率</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 动画库 -->
             <div class="card">
-                <h3 style="margin-bottom: 15px;">🎬 选择动画开始</h3>
+                <h3>📚 我的动画库</h3>
                 <div class="animation-grid" id="animationLibrary">
-                    <!-- 动画卡片动态生成 -->
+                    <!-- 动画列表动态生成 -->
+                </div>
+                
+                <button class="btn btn-secondary" onclick="showSection('upload-section')" style="margin-top: 15px;">
+                    ＋ 上传新动画
+                </button>
+            </div>
+        </div>
+
+        <!-- 上传界面 -->
+        <div id="upload-section" class="content-section">
+            <div class="card">
+                <h2>📤 上传动画</h2>
+                <p style="color: var(--text-light); margin-bottom: 20px;">为孩子们添加新的学习内容</p>
+
+                <!-- 上传区域 -->
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>选择动画文件</h3>
+                    <p class="upload-instructions">支持 MP4 格式，最大 50MB</p>
+                    <button class="btn btn-primary" onclick="document.getElementById('videoFile').click()">
+                        选择视频文件
+                    </button>
+                    <input type="file" id="videoFile" class="file-input" accept="video/*" onchange="handleFileSelect(event)">
+                </div>
+
+                <!-- 动画信息表单 -->
+                <div id="animationForm" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">动画标题</label>
+                        <input type="text" id="animationTitle" class="form-input" placeholder="例如：小猪佩奇 - 国际日">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">难度级别</label>
+                        <select id="animationLevel" class="form-select">
+                            <option value="beginner">初级</option>
+                            <option value="intermediate">中级</option>
+                            <option value="advanced">高级</option>
+                        </select>
+                    </div>
+
+                    <h4 style="margin: 20px 0 10px 0;">📝 添加台词</h4>
+                    <div id="dialoguesContainer">
+                        <!-- 台词编辑器 -->
+                    </div>
+
+                    <button class="btn btn-secondary" onclick="addDialogue()" style="width: 100%;">
+                        ＋ 添加台词
+                    </button>
+
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-secondary" onclick="showSection('main-section')" style="flex: 1;">
+                            取消
+                        </button>
+                        <button class="btn btn-primary" onclick="saveAnimation()" style="flex: 1;">
+                            保存动画
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -541,72 +406,52 @@
         <!-- 练习界面 -->
         <div id="practice-section" class="content-section">
             <div class="card">
-                <div class="recording-interface">
-                    <div class="recording-visual" id="recordingVisual">
-                        🎤
+                <h2>🎤 跟读练习</h2>
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 3em; margin: 20px 0;">🎬</div>
+                    <div style="font-size: 1.2em; margin: 15px 0; padding: 15px; background: #F8FAFC; border-radius: 10px;">
+                        "Hello, how are you today?"
                     </div>
-                    <div class="recording-timer" id="recordingTimer">00:00</div>
-                    <div class="subtitle-display" id="currentSubtitle">
-                        请点击开始按钮朗读句子
-                    </div>
-                    <button class="btn btn-primary btn-large" id="recordBtn" onclick="toggleRecording()">
+                    <button class="btn btn-primary" style="margin: 20px 0;">
                         开始录音
                     </button>
-                    <button class="btn btn-secondary" onclick="backToMain()" style="width: auto; margin-top: 15px;">
-                        ← 返回
+                    <button class="btn btn-secondary" onclick="showSection('main-section')">
+                        返回
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- 移动端底部导航 -->
+        <!-- 底部导航 -->
         <div class="bottom-nav">
-            <button class="nav-item active" onclick="showSection('user-section')">
+            <button class="nav-item" onclick="showSection('user-section')">
                 <div class="nav-icon">👥</div>
                 <div>用户</div>
             </button>
-            <button class="nav-item" onclick="showSection('main-section')">
+            <button class="nav-item active" onclick="showSection('main-section')">
                 <div class="nav-icon">🎓</div>
                 <div>学习</div>
+            </button>
+            <button class="nav-item" onclick="showSection('upload-section')">
+                <div class="nav-icon">📤</div>
+                <div>上传</div>
             </button>
             <button class="nav-item" onclick="showSection('practice-section')">
                 <div class="nav-icon">🎤</div>
                 <div>练习</div>
             </button>
-            <button class="nav-item" onclick="showSettings()">
-                <div class="nav-icon">⚙️</div>
-                <div>设置</div>
-            </button>
         </div>
     </div>
 
     <script>
-        // 移动端优化初始化
-        function initializeMobileApp() {
-            // 防止页面缩放
-            document.addEventListener('touchstart', function(e) {
-                if (e.touches.length > 1) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            // 防止双击缩放
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function(e) {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    e.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-
-            // 加载用户数据
-            loadUsers();
-            renderUserGrid();
-            
-            // 更新导航状态
-            updateNavState('user-section');
-        }
+        // 当前编辑的动画数据
+        let currentAnimation = {
+            title: '',
+            level: 'beginner',
+            videoFile: null,
+            videoUrl: null,
+            dialogues: []
+        };
 
         // 显示/隐藏区域
         function showSection(sectionId) {
@@ -614,7 +459,14 @@
                 section.classList.remove('active');
             });
             document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航状态
             updateNavState(sectionId);
+            
+            // 如果是主界面，加载动画库
+            if (sectionId === 'main-section') {
+                loadAnimationLibrary();
+            }
         }
 
         // 更新导航状态
@@ -625,8 +477,9 @@
             
             const navMap = {
                 'user-section': 0,
-                'main-section': 1, 
-                'practice-section': 2
+                'main-section': 1,
+                'upload-section': 2,
+                'practice-section': 3
             };
             
             if (navMap[activeSection] !== undefined) {
@@ -634,130 +487,228 @@
             }
         }
 
-        // 用户管理函数
-        function showAddUserForm() {
-            document.getElementById('addUserForm').style.display = 'block';
-        }
-
-        function hideAddUserForm() {
-            document.getElementById('addUserForm').style.display = 'none';
-        }
-
-        let selectedAvatar = '👦';
-        function selectAvatar(avatar) {
-            selectedAvatar = avatar;
-            // 可以在这里添加视觉反馈
-        }
-
-        // 录音功能
-        function toggleRecording() {
-            const recordBtn = document.getElementById('recordBtn');
-            const recordingVisual = document.getElementById('recordingVisual');
-            
-            if (recordBtn.textContent === '开始录音') {
-                // 开始录音
-                recordBtn.textContent = '停止录音';
-                recordBtn.classList.add('btn-recording');
-                recordingVisual.classList.add('recording');
-                recordingVisual.textContent = '●';
-                
-                // 开始计时
-                startRecordingTimer();
-                
-                // 模拟录音过程
-                simulateRecording();
-            } else {
-                // 停止录音
-                recordBtn.textContent = '开始录音';
-                recordBtn.classList.remove('btn-recording');
-                recordingVisual.classList.remove('recording');
-                recordingVisual.textContent = '🎤';
-                
-                // 停止计时
-                stopRecordingTimer();
-                
-                // 显示结果
-                showRecordingResult();
-            }
-        }
-
-        let timerInterval;
-        let seconds = 0;
-        
-        function startRecordingTimer() {
-            seconds = 0;
-            timerInterval = setInterval(() => {
-                seconds++;
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = seconds % 60;
-                document.getElementById('recordingTimer').textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-            }, 1000);
-        }
-        
-        function stopRecordingTimer() {
-            clearInterval(timerInterval);
-        }
-
-        function simulateRecording() {
-            // 模拟录音过程中的字幕变化
-            const subtitles = [
-                "Hello, how are you?",
-                "I'm learning English!",
-                "This is so much fun!",
-                "Let's practice together!"
-            ];
-            
-            let index = 0;
-            const subtitleInterval = setInterval(() => {
-                if (document.getElementById('recordBtn').textContent === '停止录音') {
-                    document.getElementById('currentSubtitle').textContent = subtitles[index];
-                    index = (index + 1) % subtitles.length;
-                } else {
-                    clearInterval(subtitleInterval);
-                }
-            }, 2000);
-        }
-
-        function showRecordingResult() {
-            const accuracy = Math.floor(Math.random() * 30) + 70; // 70-100% 随机准确率
-            document.getElementById('currentSubtitle').innerHTML = 
-                `<div style="color: #10B981; font-weight: bold;">🎉 朗读完成！</div>
-                 <div style="margin-top: 10px;">准确率: <strong>${accuracy}%</strong></div>
-                 <div style="font-size: 0.9em; margin-top: 5px; color: #666;">点击开始按钮再次练习</div>`;
-        }
-
-        function backToMain() {
+        // 选择用户
+        function selectUser(userName) {
+            document.getElementById('currentUser').textContent = userName;
             showSection('main-section');
         }
 
-        function showSettings() {
-            alert('设置功能将在完整版本中实现');
-        }
-
-        // 示例数据初始化
-        function loadUsers() {
-            if (!localStorage.getItem('english_learning_users')) {
-                const defaultUsers = {
-                    'user_1': { id: 'user_1', name: '小明', avatar: '👦', color: '#10B981' },
-                    'user_2': { id: 'user_2', name: '小红', avatar: '👧', color: '#EF4444' },
-                    'user_3': { id: 'user_3', name: '小华', avatar: '🐻', color: '#3B82F6' }
-                };
-                localStorage.setItem('english_learning_users', JSON.stringify(defaultUsers));
+        // 处理文件选择
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                processVideoFile(file);
             }
         }
 
-        function renderUserGrid() {
-            const users = JSON.parse(localStorage.getItem('english_learning_users') || '{}');
-            const container = document.getElementById('usersGrid');
+        // 处理视频文件
+        function processVideoFile(file) {
+            if (!file.type.startsWith('video/')) {
+                alert('请选择视频文件（MP4格式）');
+                return;
+            }
+
+            if (file.size > 50 * 1024 * 1024) {
+                alert('文件大小不能超过50MB');
+                return;
+            }
+
+            currentAnimation.videoFile = file;
+            currentAnimation.videoUrl = URL.createObjectURL(file);
+            
+            // 显示表单
+            document.getElementById('animationForm').style.display = 'block';
+            document.getElementById('uploadArea').style.display = 'none';
+            
+            // 自动生成标题
+            const title = file.name.replace(/\.[^/.]+$/, "");
+            document.getElementById('animationTitle').value = title;
+            
+            // 添加一个示例台词
+            addDialogue();
+        }
+
+        // 添加台词编辑器
+        function addDialogue() {
+            const container = document.getElementById('dialoguesContainer');
+            const index = currentAnimation.dialogues.length;
+            
+            const dialogueEditor = document.createElement('div');
+            dialogueEditor.className = 'dialogue-editor';
+            dialogueEditor.innerHTML = `
+                <div class="dialogue-header">
+                    <strong>台词 #${index + 1}</strong>
+                    <button type="button" class="remove-dialogue" onclick="removeDialogue(${index})">删除</button>
+                </div>
+                <div class="time-inputs">
+                    <div>
+                        <label style="font-size: 0.8em;">开始时间（秒）</label>
+                        <input type="number" class="form-input" value="0" min="0" step="1" 
+                               onchange="updateDialogueTime(${index}, 'startTime', this.value)">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.8em;">结束时间（秒）</label>
+                        <input type="number" class="form-input" value="5" min="0" step="1"
+                               onchange="updateDialogueTime(${index}, 'endTime', this.value)">
+                    </div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <label style="font-size: 0.8em;">角色名称</label>
+                    <input type="text" class="form-input" placeholder="例如：Peppa"
+                           onchange="updateDialogueField(${index}, 'character', this.value)">
+                </div>
+                <div style="margin-top: 10px;">
+                    <label style="font-size: 0.8em;">台词内容</label>
+                    <textarea class="form-input" placeholder="输入英文台词..." style="height: 60px;"
+                              onchange="updateDialogueField(${index}, 'text', this.value)"></textarea>
+                </div>
+            `;
+            
+            container.appendChild(dialogueEditor);
+            
+            // 添加到数据模型
+            currentAnimation.dialogues.push({
+                startTime: 0,
+                endTime: 5,
+                character: '',
+                text: ''
+            });
+        }
+
+        // 移除台词
+        function removeDialogue(index) {
+            currentAnimation.dialogues.splice(index, 1);
+            renderDialogues();
+        }
+
+        // 更新台词时间
+        function updateDialogueTime(index, field, value) {
+            if (currentAnimation.dialogues[index]) {
+                currentAnimation.dialogues[index][field] = parseFloat(value);
+            }
+        }
+
+        // 更新台词字段
+        function updateDialogueField(index, field, value) {
+            if (currentAnimation.dialogues[index]) {
+                currentAnimation.dialogues[index][field] = value;
+            }
+        }
+
+        // 重新渲染台词
+        function renderDialogues() {
+            const container = document.getElementById('dialoguesContainer');
+            container.innerHTML = '';
+            currentAnimation.dialogues.forEach((dialogue, index) => {
+                const dialogueEditor = document.createElement('div');
+                dialogueEditor.className = 'dialogue-editor';
+                dialogueEditor.innerHTML = `
+                    <div class="dialogue-header">
+                        <strong>台词 #${index + 1}</strong>
+                        <button type="button" class="remove-dialogue" onclick="removeDialogue(${index})">删除</button>
+                    </div>
+                    <div class="time-inputs">
+                        <div>
+                            <label style="font-size: 0.8em;">开始时间（秒）</label>
+                            <input type="number" class="form-input" value="${dialogue.startTime}" min="0" step="1" 
+                                   onchange="updateDialogueTime(${index}, 'startTime', this.value)">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8em;">结束时间（秒）</label>
+                            <input type="number" class="form-input" value="${dialogue.endTime}" min="0" step="1"
+                                   onchange="updateDialogueTime(${index}, 'endTime', this.value)">
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <label style="font-size: 0.8em;">角色名称</label>
+                        <input type="text" class="form-input" value="${dialogue.character}" placeholder="例如：Peppa"
+                               onchange="updateDialogueField(${index}, 'character', this.value)">
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <label style="font-size: 0.8em;">台词内容</label>
+                        <textarea class="form-input" style="height: 60px;"
+                                  onchange="updateDialogueField(${index}, 'text', this.value)">${dialogue.text}</textarea>
+                    </div>
+                `;
+                container.appendChild(dialogueEditor);
+            });
+        }
+
+        // 保存动画
+        function saveAnimation() {
+            // 收集表单数据
+            currentAnimation.title = document.getElementById('animationTitle').value;
+            currentAnimation.level = document.getElementById('animationLevel').value;
+
+            // 验证数据
+            if (!currentAnimation.title.trim()) {
+                alert('请输入动画标题');
+                return;
+            }
+
+            if (currentAnimation.dialogues.length === 0) {
+                alert('请至少添加一条台词');
+                return;
+            }
+
+            // 保存到本地存储
+            const library = getAnimationLibrary();
+            const animationId = 'animation_' + Date.now();
+            
+            library[animationId] = {
+                ...currentAnimation,
+                id: animationId,
+                createdAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('english_animation_library', JSON.stringify(library));
+            
+            alert('✅ 动画内容保存成功！');
+            
+            // 重置表单并返回主界面
+            resetUploadForm();
+            showSection('main-section');
+        }
+
+        // 获取动画库
+        function getAnimationLibrary() {
+            const stored = localStorage.getItem('english_animation_library');
+            return stored ? JSON.parse(stored) : {};
+        }
+
+        // 加载动画库
+        function loadAnimationLibrary() {
+            const library = getAnimationLibrary();
+            const container = document.getElementById('animationLibrary');
+            
+            if (Object.keys(library).length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--text-light);">
+                        <div style="font-size: 3em; margin-bottom: 15px;">📺</div>
+                        <p>还没有动画内容</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">点击"上传新动画"添加内容</p>
+                    </div>
+                `;
+                return;
+            }
             
             let html = '';
-            Object.values(users).forEach(user => {
+            Object.values(library).forEach(animation => {
                 html += `
-                    <div class="user-card" onclick="selectUser('${user.id}')">
-                        <div class="user-avatar">${user.avatar}</div>
-                        <div class="user-name">${user.name}</div>
-                        <div class="user-progress">点击选择</div>
+                    <div class="animation-card">
+                        <div class="animation-thumbnail">
+                            🎬 ${animation.title}
+                        </div>
+                        <div class="animation-info">
+                            <div class="animation-title">${animation.title}</div>
+                            <div class="animation-meta">
+                                难度: ${getLevelText(animation.level)} | 
+                                台词: ${animation.dialogues.length}句
+                            </div>
+                            <button class="btn btn-primary btn-small" onclick="startPractice('${animation.id}')" style="width: 100%;">
+                                开始练习
+                            </button>
+                        </div>
                     </div>
                 `;
             });
@@ -765,58 +716,79 @@
             container.innerHTML = html;
         }
 
-        function selectUser(userId) {
-            const users = JSON.parse(localStorage.getItem('english_learning_users') || '{}');
-            const user = users[userId];
+        // 开始练习
+        function startPractice(animationId) {
+            // 保存当前练习的动画ID
+            localStorage.setItem('current_practice_animation', animationId);
             
-            document.getElementById('currentUserWelcome').textContent = `欢迎，${user.name}！${user.avatar}`;
-            showSection('main-section');
+            // 跳转到练习界面
+            showSection('practice-section');
             
-            // 更新进度数据
-            updateProgressData();
+            // 在实际完整版本中，这里会加载具体的练习内容
+            alert('开始练习！在实际完整版本中，这里会加载具体的动画和台词。');
         }
 
-        function updateProgressData() {
-            // 模拟进度数据
-            document.getElementById('completedAnimations').textContent = Math.floor(Math.random() * 5);
-            document.getElementById('totalSentences').textContent = Math.floor(Math.random() * 20) + 5;
-            document.getElementById('averageAccuracy').textContent = Math.floor(Math.random() * 30) + 70 + '%';
-            document.getElementById('learningTime').textContent = Math.floor(Math.random() * 30) + 10 + 'm';
-        }
-
-        function switchUser() {
-            showSection('user-section');
-        }
-
-        function createNewUser() {
-            const name = document.getElementById('newUserName').value.trim();
-            if (!name) {
-                alert('请输入用户姓名');
-                return;
-            }
-            
-            const users = JSON.parse(localStorage.getItem('english_learning_users') || '{}');
-            const userId = 'user_' + Date.now();
-            const colors = ['#10B981', '#EF4444', '#3B82F6', '#8B5CF6', '#F59E0B'];
-            const color = colors[Object.keys(users).length % colors.length];
-            
-            users[userId] = {
-                id: userId,
-                name: name,
-                avatar: selectedAvatar,
-                color: color
+        // 重置上传表单
+        function resetUploadForm() {
+            currentAnimation = {
+                title: '',
+                level: 'beginner',
+                videoFile: null,
+                videoUrl: null,
+                dialogues: []
             };
             
-            localStorage.setItem('english_learning_users', JSON.stringify(users));
-            document.getElementById('newUserName').value = '';
-            hideAddUserForm();
-            renderUserGrid();
-            
-            alert(`✅ 用户 ${name} 创建成功！`);
+            document.getElementById('animationForm').style.display = 'none';
+            document.getElementById('uploadArea').style.display = 'block';
+            document.getElementById('videoFile').value = '';
+            document.getElementById('dialoguesContainer').innerHTML = '';
+        }
+
+        // 工具函数
+        function getLevelText(level) {
+            const levels = {
+                'beginner': '初级',
+                'intermediate': '中级',
+                'advanced': '高级'
+            };
+            return levels[level] || level;
+        }
+
+        // 初始化示例数据
+        function initializeSampleData() {
+            if (Object.keys(getAnimationLibrary()).length === 0) {
+                const sampleAnimation = {
+                    id: 'sample_1',
+                    title: '小猪佩奇 - 国际日',
+                    level: 'beginner',
+                    dialogues: [
+                        {
+                            startTime: 10,
+                            endTime: 15,
+                            character: 'Peppa',
+                            text: "I'm France! George is Russia."
+                        },
+                        {
+                            startTime: 16,
+                            endTime: 20,
+                            character: 'Suzy',
+                            text: "Hello! That's Dutch for hello."
+                        }
+                    ],
+                    createdAt: new Date().toISOString()
+                };
+                
+                const library = {};
+                library[sampleAnimation.id] = sampleAnimation;
+                localStorage.setItem('english_animation_library', JSON.stringify(library));
+            }
         }
 
         // 初始化应用
-        document.addEventListener('DOMContentLoaded', initializeMobileApp);
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSampleData();
+            loadAnimationLibrary();
+        });
     </script>
 </body>
 </html>
